@@ -1,0 +1,90 @@
+<div class="bg-white text-gray-900">
+  <div class="isolate px-6 py-24 sm:py-32 lg:px-8">
+    <div class="flex flex-col md:flex-row">
+      <!-- Left Image -->
+      <div class="md:w-1/2 flex items-center justify-center mb-10 md:mb-0">
+        <img src="form-img.jpg" alt="Login illustration" class="max-w-full h-auto" />
+      </div>
+
+      <!-- Right Form Section -->
+      <div class="md:w-1/2 flex items-center justify-center px-4 sm:px-10">
+        <form class="mx-auto max-w-xl w-full" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="text-center mb-10">
+            <h2 class="text-4xl font-semibold tracking-tight text-black sm:text-5xl">
+              Log in to Exclusive
+            </h2>
+            <p class="mt-2 text-lg text-gray-400">Enter your details below</p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-y-6">
+            <!-- Email -->
+            <div class="relative">
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                name="email"
+                class="peer block w-full bg-white p-3 border-b border-gray-300 focus:border-[#DB4444] text-base focus:outline-none"
+              />
+              @if(!loginForm.get('email')?.value) {
+              <label
+                for="email"
+                class="absolute left-3 top-3 text-sm font-semibold text-gray-700 transition-all peer-focus:hidden"
+              >
+                Email
+              </label>
+              }
+              <p class="invisible peer-invalid:visible text-red-500 text-sm">
+                Please provide a valid email address.
+              </p>
+            </div>
+
+            <!-- Password -->
+            <div class="relative">
+              <input
+                id="password"
+                type="password"
+                formControlName="password"
+                name="password"
+                class="peer block w-full bg-white p-3 border-b border-gray-300 focus:border-[#DB4444] text-base focus:outline-none"
+              />
+              @if(!loginForm.get('password')?.value) {
+              <label
+                for="password"
+                class="absolute left-3 top-3 text-sm font-semibold text-gray-700 transition-all peer-focus:hidden"
+              >
+                Password
+              </label>
+              }
+            </div>
+
+            <!-- Error Message -->
+            @if(!loginForm.valid) {
+            <div class="text-red-500 text-sm" id="error-message">
+              {{ errorMessage }}
+            </div>
+            }
+
+            <!-- Submit Button -->
+            <div class="mt-6">
+              <button
+                type="submit"
+                class="block w-full rounded-md bg-[#DB4444] px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-[#f41414] transition-all"
+              >
+                Log in
+              </button>
+            </div>
+
+          </div>
+
+          <div class="mt-5 text-center">
+            <p>
+              Don’t have an account?
+              <a routerLink="/register" class="text-[#DB4444] hover:text-[#f41414]"> Sign up </a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
