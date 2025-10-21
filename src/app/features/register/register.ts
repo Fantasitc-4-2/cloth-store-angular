@@ -28,7 +28,6 @@ export class Register {
       if (!this.registerForm.valid) {
         this.validInputs = false;
         return;
-        
       }
       else {
         const res = this.registerService.signUser(this.registerForm.value).subscribe( res => {
