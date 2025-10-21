@@ -1,0 +1,127 @@
+<div class="sidebar">
+  <h3 class="sidebar-title">Filters</h3>
+
+  <!-- Size -->
+  <div class="filter-section">
+    <h4>Size</h4>
+    <div class="size-buttons">
+      <button *ngFor="let size of sizes" class="size-btn">{{ size }}</button>
+    </div>
+  </div>
+
+  <!-- Availability -->
+  <div class="filter-section">
+    <div class="filter-header" (click)="toggleAvailability()">
+      <h4>Availability</h4>
+      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !availabilityOpen, 'fa-chevron-up': availabilityOpen }"></i>
+    </div>
+
+    <div class="filter-body" *ngIf="availabilityOpen">
+      <label class="checkbox">
+        <input type="checkbox" />
+        <span>Availability</span>
+        <span class="count">(450)</span>
+      </label>
+
+      <label class="checkbox">
+        <input type="checkbox" />
+        <span>Out of Stock</span>
+        <span class="count">(18)</span>
+      </label>
+    </div>
+  </div>
+  <!-- Category -->
+  <div class="filter-section">
+    <div class="filter-header" (click)="toggleCategory()">
+      <h4>Category</h4>
+      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !categoryOpen, 'fa-chevron-up': categoryOpen }"></i>
+    </div>
+
+    <div class="filter-body" *ngIf="categoryOpen">
+      <div class="cats">
+        <button *ngFor="let c of categories" (click)="selectCategory(c)" class="cat-btn">{{ c }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Colors -->
+  <div class="filter-section">
+    <div class="filter-header" (click)="toggleColors()">
+      <h4>Colors</h4>
+      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !colorsOpen, 'fa-chevron-up': colorsOpen }"></i>
+    </div>
+
+    <div class="filter-body" *ngIf="colorsOpen">
+      <div class="color-swatches">
+        <button *ngFor="let col of colors"
+                (click)="selectColor(col)"
+                class="swatch"
+                [class.selected]="selectedColor === col"
+                [style.background]="col.toLowerCase() === 'white' ? '#fff' : col.toLowerCase()"
+                [attr.title]="col">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Price Range -->
+  <div class="filter-section">
+    <div class="filter-header" (click)="togglePriceRange()">
+      <h4>Price Range</h4>
+      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !priceRangeOpen, 'fa-chevron-up': priceRangeOpen }"></i>
+    </div>
+
+    <div class="filter-body" *ngIf="priceRangeOpen">
+      <div class="price-inputs">
+        <input type="number" [(ngModel)]="minPrice" placeholder="Min" />
+        <input type="number" [(ngModel)]="maxPrice" placeholder="Max" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Collections -->
+  <div class="filter-section">
+    <div class="filter-header" (click)="toggleCollections()">
+      <h4>Collections</h4>
+      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !collectionsOpen, 'fa-chevron-up': collectionsOpen }"></i>
+    </div>
+
+    <div class="filter-body" *ngIf="collectionsOpen">
+      <div class="collections">
+        <button *ngFor="let col of collections" (click)="selectCollection(col)" class="collection-btn">{{ col }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tags -->
+  <div class="filter-section">
+    <div class="filter-header" (click)="toggleTags()">
+      <h4>Tags</h4>
+      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !tagsOpen, 'fa-chevron-up': tagsOpen }"></i>
+    </div>
+
+    <div class="filter-body" *ngIf="tagsOpen">
+      <div class="tags">
+        <button *ngFor="let t of tags" (click)="selectTag(t)" class="tag-btn">{{ t }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ratings -->
+  <div class="filter-section">
+    <div class="filter-header" (click)="toggleRatings()">
+      <h4>Ratings</h4>
+      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !ratingsOpen, 'fa-chevron-up': ratingsOpen }"></i>
+    </div>
+
+    <div class="filter-body" *ngIf="ratingsOpen">
+      <div class="ratings">
+        <label *ngFor="let r of [5,4,3,2,1]">
+          <input type="radio" name="rating" [value]="r" [(ngModel)]="selectedRating" />
+          <span>{{ r }} star{{ r>1 ? 's' : '' }}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+</div>
