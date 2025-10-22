@@ -1,62 +1,68 @@
-<div class="sidebar">
-  <h3 class="sidebar-title">Filters</h3>
+<div class="w-75 bg-info p-4 font-sans text-gray-900 border-r border-gray-200">
+  <h3 class="font-bold text-lg mb-4 tracking-wide">Filters</h3>
 
   <!-- Size -->
-  <div class="filter-section">
-    <h4>Size</h4>
-    <div class="size-buttons">
-      <button *ngFor="let size of sizes" class="size-btn">{{ size }}</button>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <h4 class="font-semibold text-sm mb-2">Size</h4>
+    <div class="flex flex-wrap gap-2">
+      <button *ngFor="let size of sizes" 
+              class="px-3 py-1.5 text-sm border border-gray-500 hover:shadow-lg hover:-translate-y-0.5 transition-all bg-transparent">
+        {{ size }}
+      </button>
     </div>
   </div>
 
   <!-- Availability -->
-  <div class="filter-section">
-    <div class="filter-header" (click)="toggleAvailability()">
-      <h4>Availability</h4>
-      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !availabilityOpen, 'fa-chevron-up': availabilityOpen }"></i>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <div class="flex justify-between items-center cursor-pointer py-1.5" (click)="toggleAvailability()">
+      <h4 class="font-semibold text-sm">Availability</h4>
+      <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !availabilityOpen, 'fa-chevron-up': availabilityOpen }"></i>
     </div>
 
-    <div class="filter-body" *ngIf="availabilityOpen">
-      <label class="checkbox">
-        <input type="checkbox" />
+    <div class="pt-3" *ngIf="availabilityOpen">
+      <label class="flex items-center gap-2 text-sm mb-2">
+        <input type="checkbox" class="rounded border-gray-300" />
         <span>Availability</span>
-        <span class="count">(450)</span>
+        <span class="text-gray-500 text-xs">(450)</span>
       </label>
 
-      <label class="checkbox">
-        <input type="checkbox" />
+      <label class="flex items-center gap-2 text-sm">
+        <input type="checkbox" class="rounded border-gray-300" />
         <span>Out of Stock</span>
-        <span class="count">(18)</span>
+        <span class="text-gray-500 text-xs">(18)</span>
       </label>
     </div>
   </div>
   <!-- Category -->
-  <div class="filter-section">
-    <div class="filter-header" (click)="toggleCategory()">
-      <h4>Category</h4>
-      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !categoryOpen, 'fa-chevron-up': categoryOpen }"></i>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <div class="flex justify-between items-center cursor-pointer py-1.5" (click)="toggleCategory()">
+      <h4 class="font-semibold text-sm">Category</h4>
+      <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !categoryOpen, 'fa-chevron-up': categoryOpen }"></i>
     </div>
 
-    <div class="filter-body" *ngIf="categoryOpen">
-      <div class="cats">
-        <button *ngFor="let c of categories" (click)="selectCategory(c)" class="cat-btn">{{ c }}</button>
+    <div class="pt-3" *ngIf="categoryOpen">
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let c of categories" 
+                (click)="selectCategory(c)" 
+                class="px-3 py-1.5 text-sm border border-gray-500 hover:shadow-lg hover:-translate-y-0.5 transition-all bg-transparent">
+          {{ c }}
+        </button>
       </div>
     </div>
   </div>
 
   <!-- Colors -->
-  <div class="filter-section">
-    <div class="filter-header" (click)="toggleColors()">
-      <h4>Colors</h4>
-      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !colorsOpen, 'fa-chevron-up': colorsOpen }"></i>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <div class="flex justify-between items-center cursor-pointer py-1.5" (click)="toggleColors()">
+      <h4 class="font-semibold text-sm">Colors</h4>
+      <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !colorsOpen, 'fa-chevron-up': colorsOpen }"></i>
     </div>
 
-    <div class="filter-body" *ngIf="colorsOpen">
-      <div class="color-swatches">
+    <div class="pt-3" *ngIf="colorsOpen">
+      <div class="flex flex-wrap gap-2">
         <button *ngFor="let col of colors"
                 (click)="selectColor(col)"
-                class="swatch"
-                [class.selected]="selectedColor === col"
+                [class]="'w-8 h-8 rounded-md border border-gray-200 p-0 transition-all hover:shadow-lg hover:-translate-y-0.5 ' + (selectedColor === col ? 'ring-2 ring-blue-200 ring-offset-1 -translate-y-0.5' : '')"
                 [style.background]="col.toLowerCase() === 'white' ? '#fff' : col.toLowerCase()"
                 [attr.title]="col">
         </button>
@@ -65,59 +71,70 @@
   </div>
 
   <!-- Price Range -->
-  <div class="filter-section">
-    <div class="filter-header" (click)="togglePriceRange()">
-      <h4>Price Range</h4>
-      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !priceRangeOpen, 'fa-chevron-up': priceRangeOpen }"></i>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <div class="flex justify-between items-center cursor-pointer py-1.5" (click)="togglePriceRange()">
+      <h4 class="font-semibold text-sm">Price Range</h4>
+      <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !priceRangeOpen, 'fa-chevron-up': priceRangeOpen }"></i>
     </div>
 
-    <div class="filter-body" *ngIf="priceRangeOpen">
-      <div class="price-inputs">
-        <input type="number" [(ngModel)]="minPrice" placeholder="Min" />
-        <input type="number" [(ngModel)]="maxPrice" placeholder="Max" />
+    <div class="pt-3" *ngIf="priceRangeOpen">
+      <div class="flex gap-2">
+        <input type="number" [(ngModel)]="minPrice" placeholder="Min" 
+               class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-md focus:ring-1 focus:ring-gray-300 outline-none" />
+        <input type="number" [(ngModel)]="maxPrice" placeholder="Max" 
+               class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-md focus:ring-1 focus:ring-gray-300 outline-none" />
       </div>
     </div>
   </div>
 
   <!-- Collections -->
-  <div class="filter-section">
-    <div class="filter-header" (click)="toggleCollections()">
-      <h4>Collections</h4>
-      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !collectionsOpen, 'fa-chevron-up': collectionsOpen }"></i>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <div class="flex justify-between items-center cursor-pointer py-1.5" (click)="toggleCollections()">
+      <h4 class="font-semibold text-sm">Collections</h4>
+      <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !collectionsOpen, 'fa-chevron-up': collectionsOpen }"></i>
     </div>
 
-    <div class="filter-body" *ngIf="collectionsOpen">
-      <div class="collections">
-        <button *ngFor="let col of collections" (click)="selectCollection(col)" class="collection-btn">{{ col }}</button>
+    <div class="pt-3" *ngIf="collectionsOpen">
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let col of collections" 
+                (click)="selectCollection(col)" 
+                class="px-3 py-1.5 text-sm border border-gray-500 hover:shadow-lg hover:-translate-y-0.5 transition-all bg-transparent">
+          {{ col }}
+        </button>
       </div>
     </div>
   </div>
 
   <!-- Tags -->
-  <div class="filter-section">
-    <div class="filter-header" (click)="toggleTags()">
-      <h4>Tags</h4>
-      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !tagsOpen, 'fa-chevron-up': tagsOpen }"></i>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <div class="flex justify-between items-center cursor-pointer py-1.5" (click)="toggleTags()">
+      <h4 class="font-semibold text-sm">Tags</h4>
+      <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !tagsOpen, 'fa-chevron-up': tagsOpen }"></i>
     </div>
 
-    <div class="filter-body" *ngIf="tagsOpen">
-      <div class="tags">
-        <button *ngFor="let t of tags" (click)="selectTag(t)" class="tag-btn">{{ t }}</button>
+    <div class="pt-3" *ngIf="tagsOpen">
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let t of tags" 
+                (click)="selectTag(t)" 
+                class="px-3 py-1.5 text-sm border border-gray-500 hover:shadow-lg hover:-translate-y-0.5 transition-all bg-transparent">
+          {{ t }}
+        </button>
       </div>
     </div>
   </div>
 
   <!-- Ratings -->
-  <div class="filter-section">
-    <div class="filter-header" (click)="toggleRatings()">
-      <h4>Ratings</h4>
-      <i class="fa-solid" [ngClass]="{ 'fa-chevron-down': !ratingsOpen, 'fa-chevron-up': ratingsOpen }"></i>
+  <div class="mb-6 pb-4 border-b border-gray-400 border-dotted">
+    <div class="flex justify-between items-center cursor-pointer py-1.5" (click)="toggleRatings()">
+      <h4 class="font-semibold text-sm">Ratings</h4>
+      <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !ratingsOpen, 'fa-chevron-up': ratingsOpen }"></i>
     </div>
 
-    <div class="filter-body" *ngIf="ratingsOpen">
-      <div class="ratings">
-        <label *ngFor="let r of [5,4,3,2,1]">
-          <input type="radio" name="rating" [value]="r" [(ngModel)]="selectedRating" />
+    <div class="pt-3" *ngIf="ratingsOpen">
+      <div class="space-y-2">
+        <label *ngFor="let r of [5,4,3,2,1]" class="flex items-center gap-2 text-sm cursor-pointer">
+          <input type="radio" name="rating" [value]="r" [(ngModel)]="selectedRating" 
+                 class="text-blue-600 border-gray-300 focus:ring-blue-500" />
           <span>{{ r }} star{{ r>1 ? 's' : '' }}</span>
         </label>
       </div>
