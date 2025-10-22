@@ -1,7 +1,5 @@
 ul {
   list-style: none;
-  display: flex;
-  gap: 20px;
   padding: 10px;
 }
 
@@ -12,10 +10,8 @@ nav {
 
 /* Mobile Menu Toggle Button */
 .mobile-menu-toggle {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  z-index: 1000;
+  position: relative;
+  z-index: 1001;
   background: black;
   color: white;
   border: none;
@@ -34,15 +30,59 @@ nav {
   transition: transform 0.3s ease;
 }
 
-/* Navigation Content */
-.nav-content {
-  transition: all 0.3s ease-in-out;
+/* Logo Container */
+.logo-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo-container ul {
+  width: 60px;
+  height: 50px;
+  position: relative;
+}
+
+.logo1 {
+  width: 100%;
+  height: 100%;
+}
+
+.logo2 {
+  height: 66%;
+  top: 17%;
+  left: 43%;
+}
+
+/* Right Icons */
+.right-icons {
+  margin-left: auto;
+}
+
+/* Hide mobile elements on desktop */
+.mobile-wishlist {
+  display: none;
 }
 
 /* Desktop - Default (above 768px) */
 @media only screen and (min-width: 769px) {
   .mobile-menu-toggle {
     display: none !important;
+  }
+
+  .nav-sidebar {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .desktop-wishlist {
+    display: flex;
   }
 }
 
@@ -53,138 +93,192 @@ nav {
   }
 
   nav {
-    padding: 15px 20px;
+    padding: 8px 12px;
   }
 
-  /* Hide nav content by default on mobile */
-  .nav-content {
+  /* Hide desktop wishlist */
+  .desktop-wishlist {
+    display: none !important;
+  }
+
+  /* Show mobile wishlist in sidebar */
+  .mobile-wishlist {
+    display: block !important;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+  }
+
+  /* Sidebar Navigation */
+  .nav-sidebar {
     position: fixed;
     top: 0;
     left: -100%;
-    width: 80%;
+    width: 75%;
     height: 100vh;
     background: white;
-    flex-direction: column;
-    justify-content: flex-start;
     padding-top: 80px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 999;
     overflow-y: auto;
+    transition: left 0.3s ease-in-out;
   }
 
-  /* Show nav content when menu is open */
-  nav.menu-open .nav-content {
+  /* Show sidebar when menu is open */
+  nav.menu-open .nav-sidebar {
     left: 0;
   }
 
-  nav > .nav-content > ul {
-    width: 100%;
+  .nav-links {
     flex-direction: column;
-    gap: 15px;
+    width: 100%;
     padding: 20px;
+    gap: 15px;
   }
 
-  /* Logo section adjustments */
-  ul.relative {
-    flex-direction: row !important;
-    justify-content: center;
+  .nav-links li {
+    width: 100%;
   }
 
-  /* ul.relative li img {
-    max-width: 40px;
-    height: auto;
-  } */
-
-  ul.relative li img.absolute {
-    left: 48.5%;
-    top: 21%;
+  .nav-links li a {
+    display: block;
+    padding: 10px;
+    font-size: 16px;
   }
 
-  /* Icons section */
-  .nav-content > ul:last-child {
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    justify-content: center;
+  /* Logo - hide on mobile */
+  .logo-container {
+    display: none;
   }
 
-  span.w-\[50px\].h-\[50px\] {
-    width: 45px;
-    height: 45px;
+  /* Right icons adjustments */
+  .right-icons {
+    gap: 6px;
   }
 
-  span.w-\[70px\].h-\[50px\] {
-    width: 60px;
-    height: 45px;
+  .right-icons span.w-\[50px\].h-\[50px\] {
+    width: 42px;
+    height: 42px;
   }
 
-  div.flex {
-    gap: 10px;
+  .right-icons span.w-\[70px\].h-\[50px\] {
+    width: 58px;
+    height: 42px;
+    font-size: 13px;
+  }
+
+  .right-icons i {
+    font-size: 15px;
+  }
+
+  .mobile-menu-toggle {
+    font-size: 22px;
+    padding: 8px 12px;
   }
 }
 
 /* Mobile Small (below 640px) */
 @media only screen and (max-width: 639px) {
-  .nav-content {
-    width: 85%;
+  nav {
+    padding: 6px 10px;
   }
 
-  nav a {
-    font-size: 14px;
+  .nav-sidebar {
+    width: 80%;
   }
 
-  span.w-\[50px\].h-\[50px\] {
-    width: 40px;
-    height: 40px;
+  .right-icons {
+    gap: 5px;
   }
 
-  span.w-\[70px\].h-\[50px\] {
-    width: 55px;
-    height: 40px;
-    font-size: 12px;
+  .right-icons span.w-\[50px\].h-\[50px\] {
+    width: 38px;
+    height: 38px;
   }
 
-  /* ul.relative li img {
-    max-width: 35px;
-  } */
-
-   ul.relative li img.absolute {
-    left: 48.5%;
-    top: 21%;
+  .right-icons span.w-\[70px\].h-\[50px\] {
+    width: 52px;
+    height: 38px;
+    font-size: 11px;
   }
-  i {
-    font-size: 14px;
+
+  .right-icons i {
+    font-size: 13px;
+  }
+
+  .mobile-menu-toggle {
+    padding: 7px 10px;
+    font-size: 20px;
   }
 }
 
 /* Extra Small (below 480px) */
 @media only screen and (max-width: 479px) {
-  .nav-content {
-    width: 90%;
+  nav {
+    padding: 5px 8px;
+  }
+
+  .nav-sidebar {
+    width: 85%;
+  }
+
+  .right-icons {
+    gap: 4px;
+  }
+
+  .right-icons span.w-\[50px\].h-\[50px\] {
+    width: 35px;
+    height: 35px;
+  }
+
+  .right-icons span.w-\[70px\].h-\[50px\] {
+    width: 48px;
+    height: 35px;
+    font-size: 10px;
+  }
+
+  .right-icons i {
+    font-size: 12px;
   }
 
   .mobile-menu-toggle {
-    font-size: 20px;
-    padding: 8px 12px;
+    font-size: 18px;
+    padding: 6px 8px;
   }
 
-  span.w-\[50px\].h-\[50px\] {
-    width: 38px;
-    height: 38px;
+  .right-icons a span p {
+    font-size: 10px;
+  }
+}
+
+/* Very Small (below 380px) */
+@media only screen and (max-width: 379px) {
+  nav {
+    padding: 5px 6px;
   }
 
-  span.w-\[70px\].h-\[50px\] {
-    width: 50px;
-    height: 38px;
+  .right-icons {
+    gap: 3px;
+  }
+
+  .right-icons span.w-\[50px\].h-\[50px\] {
+    width: 32px;
+    height: 32px;
+  }
+
+  .right-icons span.w-\[70px\].h-\[50px\] {
+    width: 44px;
+    height: 32px;
+    font-size: 9px;
+  }
+
+  .right-icons i {
     font-size: 11px;
   }
 
-  ul.relative li img {
-    max-width: 30px;
-  }
-
-  ul.relative li img.absolute {
-    left: 15px;
-    top: 3px;
+  .mobile-menu-toggle {
+    font-size: 16px;
+    padding: 5px 7px;
   }
 }
 
@@ -204,5 +298,9 @@ nav.menu-open::before {
   nav.menu-open::before {
     display: none;
   }
-}
 
+  /* Show logo on desktop */
+  .logo-container {
+    display: block;
+  }
+}

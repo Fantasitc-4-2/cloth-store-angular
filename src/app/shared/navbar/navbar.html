@@ -1,69 +1,64 @@
-<nav class="flex justify-around items-center" [class.menu-open]="isMobileMenuOpen">
+<nav class="flex justify-between items-center " [class.menu-open]="isMobileMenuOpen">
+  <!-- Mobile: Burger Menu Button (Left) -->
   <button class="mobile-menu-toggle hidden" (click)="toggleMobileMenu()">
     <i [class]="isMobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
   </button>
 
-  <div class="nav-content flex justify-around items-center w-full">
-    <ul class="flex gap-4 items-center">
+  <!-- Mobile Menu Sidebar -->
+  <div class="nav-sidebar">
+    <ul class="flex gap-4 items-center nav-links">
       <li><a routerLink="/" class="font-bold">ClothStore</a></li>
       <li><a routerLink="/">Home</a></li>
       <li><a routerLink="/products">Collections</a></li>
       <li><a routerLink="/contact">New</a></li>
-    </ul>
-
-        <ul class="flex gap-2 items-center relative">
-        <li><img src="Rectangle 29.png" class="object-contain logo1" alt="Logo 1" /></li>
-        <li>
-            <img
-            src="Rectangle 30.png"
-            class="object-contain absolute top-[14%] left-[40%] logo2"
-            alt="Logo 2"
-            />
-        </li>
-        </ul>
-
-    <ul class="flex gap-4 items-center">
-      <li>
-        <a routerLink="/wishlist" class="flex">
-          <span
-            class="text-white bg-black w-[50px] h-[50px] rounded-full flex justify-center items-center -rotate-45"
-          >
+      
+      <!-- Wishlist in sidebar (mobile only) -->
+      <li class="mobile-wishlist">
+        <a routerLink="/wishlist" class="flex items-center gap-2">
+          <span class="text-white bg-black w-[50px] h-[50px] rounded-full flex justify-center items-center -rotate-45">
             <i class="fa-regular fa-heart"></i>
           </span>
-        </a>
-      </li>
-
-      <div class="flex">
-        <li>
-          <a routerLink="/cart" class="flex">
-            <span
-              class="text-white bg-black w-[70px] h-[50px] rounded-full flex justify-center items-center"
-            >
-              <p>Cart</p>
-            </span>
-          </a>
-        </li>
-
-        <li>
-          <a routerLink="/shop" class="flex">
-            <span
-              class="text-black bg-white w-[50px] h-[50px] rounded-full flex justify-center items-center border-2 border-black"
-            >
-              <i class="fa-solid fa-bag-shopping"></i>
-            </span>
-          </a>
-        </li>
-      </div>
-
-      <li>
-        <a routerLink="/profile" class="flex">
-          <span
-            class="text-white bg-black w-[50px] h-[50px] rounded-full flex justify-center items-center"
-          >
-            <i class="fa-solid fa-user"></i>
-          </span>
+          <span>Wishlist</span>
         </a>
       </li>
     </ul>
+  </div>
+
+  <!-- Center: Logo (Always Visible) -->
+  <div class="logo-container">
+    <ul class="flex gap-2 items-center  relative">
+      <li><img src="Rectangle 29.png" class="object-contain logo1" alt="Logo 1" /></li>
+      <li>
+        <img src="Rectangle 30.png" class="object-contain absolute logo2" alt="Logo 2" />
+      </li>
+    </ul>
+  </div>
+
+  <!-- Right: Cart, Shop, Profile (Always Visible) -->
+  <div class="right-icons flex gap-2 items-center">
+    <!-- Wishlist (Desktop only) -->
+    <a routerLink="/wishlist" class="desktop-wishlist">
+      <span class="text-white bg-black w-[50px] h-[50px] rounded-full flex justify-center items-center -rotate-45">
+        <i class="fa-regular fa-heart"></i>
+      </span>
+    </a>
+
+    <a routerLink="/cart" class="flex">
+      <span class="text-white bg-black w-[70px] h-[50px] rounded-full flex justify-center items-center">
+        <p>Cart</p>
+      </span>
+    </a>
+
+    <a routerLink="/shop" class="flex">
+      <span class="text-black bg-white w-[50px] h-[50px] rounded-full flex justify-center items-center border-2 border-black">
+        <i class="fa-solid fa-bag-shopping"></i>
+      </span>
+    </a>
+
+    <a routerLink="/profile" class="flex">
+      <span class="text-white bg-black w-[50px] h-[50px] rounded-full flex justify-center items-center">
+        <i class="fa-solid fa-user"></i>
+      </span>
+    </a>
   </div>
 </nav>
