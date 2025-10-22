@@ -1,2 +1,20 @@
-<app-sidebar></app-sidebar>
-<p>product-list works!</p>
+<div class="grid grid-cols-12 mt-10">
+  <!-- Sidebar -->
+  <div class="col-span-6 sm:col-span-6 lg:col-span-3 me-5 mt-20">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Products Section -->
+  <div class="col-span-6 sm:col-span-6 lg:col-span-9 ms-5">
+    <app-product-search></app-product-search>
+    
+    <div class="grid grid-cols-12">
+      <div
+        class="col-span-12 sm:col-span-12 lg:col-span-4 me-5 my-5"
+        *ngFor="let product of products"
+      >
+        <app-product-card [product]="product"></app-product-card>
+      </div>
+    </div>
+  </div>
+</div>

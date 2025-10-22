@@ -1,12 +1,10 @@
 <div class="bg-white text-gray-900">
   <div class="isolate px-6 py-24 sm:py-32 lg:px-8">
     <div class="flex flex-col md:flex-row">
-      <!-- Left Image -->
       <div class="md:w-1/2 flex items-center justify-center mb-10 md:mb-0">
         <img src="form-img.jpg" alt="Login illustration" class="max-w-full h-auto" />
       </div>
 
-      <!-- Right Form Section -->
       <div class="md:w-1/2 flex items-center justify-center px-4 sm:px-10">
         <form class="mx-auto max-w-xl w-full" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="text-center mb-10">
@@ -17,7 +15,7 @@
           </div>
 
           <div class="grid grid-cols-1 gap-y-6">
-            <!-- Email -->
+            <!-- Email -------------------------------------------------------------->
             <div class="relative">
               <input
                 id="email"
@@ -39,7 +37,7 @@
               </p>
             </div>
 
-            <!-- Password -->
+            <!-- Password --------------------------------------------------------------->
             <div class="relative">
               <input
                 id="password"
@@ -58,14 +56,14 @@
               }
             </div>
 
-            <!-- Error Message -->
+            <!-- Error Message --------------------------------------------------------->
             @if(!loginForm.valid) {
             <div class="text-red-500 text-sm" id="error-message">
               {{ errorMessage }}
             </div>
             }
 
-            <!-- Submit Button -->
+            <!-- Submit Button --------------------------------------------------------->
             <div class="mt-6">
               <button
                 type="submit"
