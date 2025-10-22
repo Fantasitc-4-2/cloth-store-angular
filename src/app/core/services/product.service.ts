@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { Product } from '../../models/product.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class ProductService {
 	// Point to your Node.js/Express API server
-	private baseUrl: string = 'http://localhost:5000/products';
+	private baseUrl = `${environment.apiUrl}/products`;
 
 	constructor(private http: HttpClient) {
 		// Log the base URL for debugging
@@ -25,4 +26,13 @@ export class ProductService {
 			})
 		);
 	}
+
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.baseUrl).pipe(
+      catchError(error => {
+        console.error('Error fetching all products:', error);
+        throw error;
+      })
+    );
+  }
 }
