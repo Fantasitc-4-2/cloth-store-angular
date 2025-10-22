@@ -13,7 +13,7 @@
         class="col-span-12 sm:col-span-12 lg:col-span-4 me-5 my-5"
         *ngFor="let product of products"
       >
-        <app-product-card [product]="product"></app-product-card>
+        <app-product-card [product]="product" (click)="goToProduct(product._id)"></app-product-card>
       </div>
     </div>
   </div>
