@@ -18,7 +18,6 @@ export class AuthGuard implements CanActivate {
     return this.userService.getUserInfo().pipe(
       map((user) => {
         if (user) {
-          console.log('Authenticated user:', user);
           return true;
         } else {
           this.router.navigate(['/login']);
@@ -30,7 +29,11 @@ export class AuthGuard implements CanActivate {
           this.router.navigate(['/login']);
           return of(false); 
         }
-        throw err;
+        else {
+          this.router.navigate(['/login']);
+          console.log(err.message);
+          return of(false); 
+        }
       })
     );
   }

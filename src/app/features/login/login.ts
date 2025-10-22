@@ -43,6 +43,9 @@ export class Login {
             this.errorMessage = 'Ensure that your account is verified.';
             break;
           }
+          default: {
+            this.errorMessage = "Error occurred. please try again later";
+          }
         }
       }
     );
