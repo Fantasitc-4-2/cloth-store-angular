@@ -1,58 +1,65 @@
+
+
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 lg:p-8 max-w-7xl mx-auto">
+    
   @if (loading) {
-    <div class="col-span-12 text-center py-20">Loading product…</div>
+  <div class="col-span-12 text-center py-20">Loading product…</div>
   } @else if (error) {
-    <div class="col-span-12 text-center text-red-600 py-20">{{ error }}</div>
+  <div class="col-span-12 text-center text-red-600 py-20">{{ error }}</div>
   } @else if (product) {
-    <!-- PRODUCT IMAGES -->
-    <div class="lg:col-span-8 p-5 m-5">
-      <div class="grid grid-cols-5 gap-4">
-        <div class="col-span-5 md:col-span-4 hover:scale-125 z-10 transition-all duration-700">
+  <!-- PRODUCT IMAGES -->
+
+  <div class="lg:col-span-8 p-5 m-5">
+    <div class="grid grid-cols-5 gap-4">
+      <div class="col-span-5 md:col-span-4 hover:scale-125 z-10 transition-all duration-700">
+        <img
+          [src]="product.image || './product-1.jpg'"
+          [alt]="product.title || 'Product image'"
+          class="w-full h-auto cursor-zoom-in"
+        />
+      </div>
+      <div class="col-span-5 md:col-span-1">
+        <div class="grid grid-cols-4 md:grid-cols-1 gap-4">
+          @for (thumb of product.sizes?.slice(0,4); track $index) {
           <img
             [src]="product.image || './product-1.jpg'"
-            [alt]="product.title || 'Product image'"
-            class="w-full h-auto cursor-zoom-in"
+            [alt]="(product.title || 'thumb') + ' ' + $index"
+            class="w-full h-auto object-cover cursor-pointer hover:scale-125 transition-all opacity-75 hover:opacity-100 duration-300"
           />
-        </div>
-        <div class="col-span-5 md:col-span-1">
-          <div class="grid grid-cols-4 md:grid-cols-1 gap-4">
-            @for (thumb of product.sizes?.slice(0,4); track $index) {
-              <img [src]="product.image || './product-1.jpg'"
-                   [alt]="(product.title || 'thumb') + ' ' + $index"
-                   class="w-full h-auto object-cover cursor-pointer hover:scale-125 transition-all opacity-75 hover:opacity-100 duration-300"
-              />
-            }
-          </div>
+          }
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- PRODUCT DETAILS -->
-    <div class="lg:col-span-4 bg-[#f6f2f2] p-10 border-2 border-gray-300">
-      <div class="space-y-6">
-        <div>
-          <h2 class="text-xl lg:text-3xl font-semibold">{{ product.title }}</h2>
-          <p class="text-md lg:text-2xl font-bold mt-2">
-            {{ product.price | currency:'USD':'symbol' }}
-          </p>
-          <p class="text-xs lg:text-sm text-gray-500 mt-1">MRP incl. of all taxes</p>
-        </div>
+  <!-- PRODUCT DETAILS -->
+  <div class="lg:col-span-4 bg-[#f6f2f2] p-10 border-2 border-gray-300">
+    <div class="space-y-6">
+      <div>
+        <h2 class="text-xl lg:text-3xl font-semibold">{{ product.title }}</h2>
+        <p class="text-md lg:text-2xl font-bold mt-2">
+          {{ product.price | currency : 'USD' : 'symbol' }}
+        </p>
+        <p class="text-xs lg:text-sm text-gray-500 mt-1">MRP incl. of all taxes</p>
+      </div>
 
-        <div>
-          <p class="text-gray-600 text-xs lg:text-sm">{{ product.description }}</p>
-        </div>
+      <div>
+        <p class="text-gray-600 text-xs lg:text-sm">{{ product.description }}</p>
+      </div>
 
-        <div>
-          <h3 class="text-sm font-medium mb-3">Availability</h3>
-          <p class="text-sm">{{ product.quantity || 0 }} in stock • {{ product.sold || 0 }} sold</p>
-        </div>
+      <div>
+        <h3 class="text-sm font-medium mb-3">Availability</h3>
+        <p class="text-sm">{{ product.quantity || 0 }} in stock • {{ product.sold || 0 }} sold</p>
+      </div>
 
-        <div>
-          <button class="w-full bg-gray-200 text-black py-3 hover:scale-105 font-medium hover:bg-green-300 active:bg-green-400 transition-all duration-300">
-            ADD TO CART
-          </button>
-        </div>
+      <div>
+        <button
+          class="w-full bg-gray-200 text-black py-3 hover:scale-105 font-medium hover:bg-green-300 active:bg-green-400 transition-all duration-300"
+        >
+          ADD TO CART
+        </button>
       </div>
     </div>
+  </div>
   }
 </div>
