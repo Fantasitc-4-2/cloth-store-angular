@@ -18,22 +18,28 @@ export class ProductList implements OnInit{
 
 
  products: Product[] = [];
+ loading = true;
+ error: string | null = null;
 
  constructor(private productService: ProductService,private router: Router) {}
 ngOnInit(): void {
     this.productService.getAllProducts().subscribe({
       next: (data) => {
         this.products = data;
-        console.log('Products loaded:', data);
+        this.loading = false;
+        // console.log('Products loaded:', data);
       },
       error: (err) => {
+        this.error = 'Error loading products';
         console.error('Error loading products:', err);
+        this.loading = false;
       }
     });
   }
 
   goToProduct(id?: string) {
   if (!id) {
+    this.error = 'Product ID is missing!';
     console.error('Product ID is missing!');
     return;
   }
