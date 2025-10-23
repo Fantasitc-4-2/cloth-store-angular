@@ -35,6 +35,6 @@ export const routes: Routes = [
   },
   {
     path: 'cart',
-    loadComponent: () => import('./features/cart/cart').then((m) => m.Cart),
+    loadChildren: () => import('./features/cart/cart.routes').then((m) => m.CART_ROUTES),
   },
 ];
