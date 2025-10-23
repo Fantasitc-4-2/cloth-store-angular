@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { WishlistItems } from '../../../components/wishlist-items/wishlist-items';
 
 @Component({
   selector: 'app-favourites',
-  imports: [],
+  imports: [WishlistItems],
   templateUrl: './favourites.html',
-  styleUrl: './favourites.css'
+  styleUrl: './favourites.css',
 })
-export class Favourites {
-
-}
+export class Favourites {}

@@ -5,7 +5,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
-  imports: [CartProducts, SummaryCard, RouterLink, RouterOutlet],
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
