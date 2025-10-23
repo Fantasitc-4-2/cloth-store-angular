@@ -25,6 +25,10 @@ export const routes: Routes = [
     component: ProductList,
   },
   {
+    path: 'products/add',
+    loadComponent: () => import('./features/products/add-product/add-product').then(m => m.AddProduct)
+  },
+  {
     path: 'profile',
     component: Profile,
     canActivate: [AuthGuard],

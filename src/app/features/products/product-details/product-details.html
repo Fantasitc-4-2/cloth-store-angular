@@ -1,17 +1,24 @@
 
 
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 lg:p-8 max-w-7xl mx-auto">
+<div class="m-10">
     
   @if (loading) {
   <div class="col-span-12 text-center py-20">Loading product…</div>
   } @else if (error) {
   <div class="col-span-12 text-center text-red-600 py-20">{{ error }}</div>
   } @else if (product) {
+    <nav class="text-sm text-gray-500 mb-4">
+  <span class="cursor-pointer hover:text-gray-800" routerLink="/">Home</span>
+  <span class="mx-2">/</span>
+  <span class="cursor-pointer transition-all hover:scale-110 text-gray-800 font-medium" routerLink="/products">Products</span>
+  <span class="mx-2">/</span>
+  <span class="text-gray-800 font-medium">{{product.title}}</span>
+</nav>
   <!-- PRODUCT IMAGES -->
-
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 lg:p-8 max-w-7xl mx-auto">
   <div class="lg:col-span-8 p-5 m-5">
     <div class="grid grid-cols-5 gap-4">
-      <div class="col-span-5 md:col-span-4 hover:scale-125 z-10 transition-all duration-700">
+      <div class="col-span-5 md:col-span-4 hover:scale-105 z-10 transition-all duration-700">
         <img
           [src]="product.image || './product-1.jpg'"
           [alt]="product.title || 'Product image'"
@@ -60,6 +67,7 @@
         </button>
       </div>
     </div>
+  </div>
   </div>
   }
 </div>

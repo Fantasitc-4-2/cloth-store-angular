@@ -1,0 +1,50 @@
+<div class="max-w-2xl mx-auto p-6">
+  <h2 class="text-2xl font-semibold mb-4">Add Product</h2>
+
+  <div *ngIf="submitError" class="text-red-600 mb-4">{{ submitError }}</div>
+
+  <div *ngIf="!submitError && image && !uploadError" class="text-green-600 mb-4">Image ready</div>
+
+  <div class="space-y-4">
+    <div>
+      <label class="block">Title</label>
+      <input class="w-full border p-2" [(ngModel)]="title" />
+    </div>
+
+    <div>
+      <label class="block">Description</label>
+      <textarea class="w-full border p-2" [(ngModel)]="description"></textarea>
+    </div>
+
+    <div>
+      <label class="block">Category</label>
+      <select class="w-full border p-2" [(ngModel)]="category">
+        <option value="">Select a category</option>
+        <option *ngFor="let c of categories" [value]="c._id">{{ c.name }}</option>
+      </select>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block">Price</label>
+        <input type="number" class="w-full border p-2" [(ngModel)]="price" />
+      </div>
+      <div>
+        <label class="block">Quantity</label>
+        <input type="number" id="quantity" class="w-full border p-2" [(ngModel)]="quantity" />
+      </div>
+    </div>
+
+    <div>
+      <label class="block">Image</label>
+      <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*" />
+      <div *ngIf="uploading">Uploading...</div>
+      <div *ngIf="uploadError" class="text-red-600">{{ uploadError }}</div>
+      <img *ngIf="image" [src]="image" class="mt-2 max-h-48" />
+    </div>
+
+    <div>
+      <button (click)="submit()" class="px-4 py-2 bg-blue-600 text-white rounded">Create product</button>
+    </div>
+  </div>
+</div>

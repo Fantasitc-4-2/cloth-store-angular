@@ -1,5 +1,5 @@
 @if (loading) {
-    <div class="col-span-12 text-center py-20">Loading product…</div>
+    <div class="col-span-12 text-center py-20">Loading products...</div>
   }
   @else if (error) {
     <div class="col-span-12 text-center text-red-600 py-20">{{ error }}</div>
@@ -13,16 +13,64 @@
 
   <!-- Products Section -->
   <div class="col-span-6 sm:col-span-6 lg:col-span-9 ms-5">
-    <app-product-search></app-product-search>
-    
-    <div class="grid grid-cols-12">
-      <div
-        class="col-span-12 sm:col-span-12 lg:col-span-4 me-5 my-5"
-        *ngFor="let product of products"
-      >
-        <app-product-card [product]="product" (click)="goToProduct(product._id)"></app-product-card>
-      </div>
+    <app-product-search
+      [searchTerm]="searchTerm"
+      [selectedCategory]="selectedCategory"
+      (searchChange)="onSearchChange($event)"
+      (categoryChange)="onCategoryChange($event)"
+      (clearFilters)="clearFilters()">
+    </app-product-search>
+
+    <!-- Results Summary -->
+    <div class="mb-4 text-sm text-gray-600">
+      @if (isSearching) {
+        <span>Searching...</span>
+      } @else {
+        Showing {{ products?.length || 0 }} of {{ totalCount }} products
+        @if (searchTerm || selectedCategory) {
+          <button
+            (click)="clearFilters()"
+            class="ml-2 text-blue-600 hover:text-blue-800 underline">
+            Clear filters
+          </button>
+        }
+      }
     </div>
+
+    <!-- Products Grid -->
+    @if (products && products.length === 0 && !loading && !isSearching) {
+      <div class="col-span-12 text-center py-20 text-gray-500">
+        <p class="text-lg mb-2">No products found</p>
+        @if (searchTerm || selectedCategory) {
+          <p class="text-sm">Try adjusting your search criteria or</p>
+          <button
+            (click)="clearFilters()"
+            class="text-blue-600 hover:text-blue-800 underline">
+            clear all filters
+          </button>
+        }
+      </div>
+    } @else if (products && products.length > 0) {
+      <div class="grid grid-cols-12">
+        <div
+          class="col-span-12 sm:col-span-12 lg:col-span-4 me-5 my-5"
+          *ngFor="let product of products"
+        >
+          <app-product-card [product]="product" (click)="goToProduct(product._id)"></app-product-card>
+        </div>
+      </div>
+    }
+
+    <!-- Pagination -->
+    @if (totalPages > 1) {
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        [hasNextPage]="hasNextPage"
+        [hasPrevPage]="hasPrevPage"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    }
   </div>
 </div>
  }
