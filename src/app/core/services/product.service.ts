@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { environment } from '../../../environments/environment';
 
@@ -37,10 +37,10 @@ export class ProductService {
 		const url = `${this.baseUrl}/${id}`;
 		console.log('Fetching product from:', url);
 		return this.http.get<Product>(url).pipe(
-			catchError(error => {
-				console.error('Error fetching product:', error);
-				throw error;
-			})
+      catchError(error => {
+        console.error('Error fetching product:', error);
+        return throwError(() => error);
+      })
 		);
 	}
 
@@ -48,7 +48,7 @@ export class ProductService {
     return this.http.get<Product[]>(this.baseUrl).pipe(
       catchError(error => {
         console.error('Error fetching all products:', error);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
@@ -84,7 +84,39 @@ export class ProductService {
         console.error('Error status:', error.status);
         console.error('Error message:', error.message);
         console.error('Error details:', error);
-        throw error;
+        return throwError(() => error);
+      })
+    );
+  }
+
+
+  addProduct(payload: any): Observable<Product> {
+    console.log('Posting new product to:', this.baseUrl, 'payload:', payload);
+    return this.http.post<Product>(this.baseUrl, payload).pipe(
+      catchError(error => {
+        console.error('Error adding product:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // POST with multipart/form-data (FormData) for image upload directly to backend
+  addProductFormData(formData: FormData): Observable<Product> {
+    console.log('Posting new product (form-data) to:', this.baseUrl);
+    return this.http.post<Product>(this.baseUrl, formData).pipe(
+      catchError(error => {
+        console.error('Error adding product (form-data):', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getCategories(): Observable<any[]> {
+    const url = `${environment.apiUrl}/categories`;
+    return this.http.get<any[]>(url).pipe(
+      catchError(error => {
+        console.error('Error fetching categories:', error);
+        return throwError(() => error);
       })
     );
   }
