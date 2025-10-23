@@ -48,4 +48,18 @@ export class UserService {
             }
         );
     }
+
+    public authenticateWithGoogle(response: any) {
+        const token = response.credential;
+        this.http.post(environment.apiUrl + "/auth/google", {token: token}, {withCredentials: true})
+            .subscribe(
+                (res) => {
+                    console.log(res);
+                }
+                , (err) => {
+                    console.log(err.message);
+                }
+            )
+
+    }
 }

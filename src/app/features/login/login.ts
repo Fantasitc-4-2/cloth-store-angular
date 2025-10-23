@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
-
+import { environment } from '../../../environments/environment';
+declare const google: any;
 @Component({
   selector: 'app-login',
   imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit{
   constructor(private registerUser: UserService, private router: Router) {}
   loginForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -17,7 +18,19 @@ export class Login {
   });
 
   errorMessage: string = 'All fields are required.';
+  
 
+  ngOnInit(): void {
+      google.accounts.id.initialize({
+      client_id: environment.GOOGLE_CLIENT_ID,
+      callback: (res: any) => this.handleGoogleResponse(res),
+  });
+
+  google.accounts.id.renderButton(
+    document.getElementById('g_id_signin'),
+    { theme: 'outline', size: 'large', width: '100%' }
+  );
+  }
   onSubmit() {
     if (!this.loginForm.valid) {
       return;
@@ -49,5 +62,9 @@ export class Login {
         }
       }
     );
+  }
+
+  handleGoogleResponse(response: any) {
+    this.registerUser.authenticateWithGoogle(response);
   }
 }
