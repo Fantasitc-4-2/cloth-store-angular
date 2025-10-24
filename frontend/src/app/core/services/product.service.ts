@@ -73,15 +73,10 @@ export class ProductService {
     }
 
     const url = this.baseUrl;
-    console.log('=== API CALL ===');
-    console.log('URL:', url);
-    console.log('Params:', httpParams.toString());
-    console.log('Full URL:', `${url}?${httpParams.toString()}`);
+    console.log('URL:', `${url}?${httpParams.toString()}`);
 
     return this.http.get<PaginatedProductsResponse>(this.baseUrl, { params: httpParams }).pipe(
       catchError(error => {
-        console.error('❌ API Error:', error);
-        console.error('Error status:', error.status);
         console.error('Error message:', error.message);
         console.error('Error details:', error);
         return throwError(() => error);
