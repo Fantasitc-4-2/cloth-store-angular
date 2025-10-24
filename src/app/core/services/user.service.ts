@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
+import { Observable } from "rxjs";
 @Injectable({
     providedIn: "root"
 })
@@ -51,15 +52,6 @@ export class UserService {
 
     public authenticateWithGoogle(response: any) {
         const token = response.credential;
-        this.http.post(environment.apiUrl + "/auth/google", {token: token}, {withCredentials: true})
-            .subscribe(
-                (res) => {
-                    console.log(res);
-                }
-                , (err) => {
-                    console.log(err.message);
-                }
-            )
-
+        return this.http.post(environment.apiUrl + "/auth/google", {token: token}, {withCredentials: true});
     }
 }

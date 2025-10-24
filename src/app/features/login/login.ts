@@ -35,6 +35,7 @@ export class Login implements OnInit{
     if (!this.loginForm.valid) {
       return;
     }
+    this.errorMessage = "";
     this.registerUser.authenticateUser(this.loginForm.value).subscribe(
       (res) => {
         if (res.status === 200) {
@@ -65,6 +66,20 @@ export class Login implements OnInit{
   }
 
   handleGoogleResponse(response: any) {
-    this.registerUser.authenticateWithGoogle(response);
+    this.registerUser.authenticateWithGoogle(response).subscribe(
+      (data) => {
+        console.log(data);
+        this.registerUser.setUser(data as User);
+        this.router.navigate(['/']);
+      },
+      err => {
+        switch (err.status) {
+          case 404: {
+            this.errorMessage = "No account is used with the google account";
+            break;
+          }
+        }
+      }
+    );
   }
 }
