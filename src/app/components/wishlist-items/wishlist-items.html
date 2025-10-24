@@ -1,0 +1,8 @@
+<div
+  class="grid col-span-1 gap-3 md:grid-cols-2 lg:grid-cols-3 lg:border-y lg:border-gray-300 lg:py-4"
+>
+  @for (item of products; track item.id){
+
+  <app-wishlist-item [product]="item"></app-wishlist-item>
+  }
+</div>

@@ -25,6 +25,10 @@ export const routes: Routes = [
     component: ProductList,
   },
   {
+    path: 'products/add',
+    loadComponent: () => import('./features/products/add-product/add-product').then(m => m.AddProduct)
+  },
+  {
     path: 'profile',
     component: Profile,
     canActivate: [AuthGuard],
@@ -35,6 +39,6 @@ export const routes: Routes = [
   },
   {
     path: 'cart',
-    loadComponent: () => import('./features/cart/cart').then((m) => m.Cart),
+    loadChildren: () => import('./features/cart/cart.routes').then((m) => m.CART_ROUTES),
   },
 ];
