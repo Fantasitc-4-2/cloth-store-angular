@@ -21,20 +21,18 @@
       (clearFilters)="clearFilters()">
     </app-product-search>
 
-    <!-- Results Summary -->
-    <div class="mb-4 text-sm text-gray-600">
-      @if (isSearching) {
-        <span>Searching...</span>
-      } @else {
-        Showing {{ products?.length || 0 }} of {{ totalCount }} products
-        @if (searchTerm || selectedCategory) {
-          <button
-            (click)="clearFilters()"
-            class="ml-2 text-blue-600 hover:text-blue-800 underline">
-            Clear filters
-          </button>
+    <!-- Results Summary + Page-size selector -->
+    <div class="mb-4 flex items-center justify-between">
+      <div class="text-sm text-gray-600">
+        @if (isSearching) {
+          <span>Searching...</span>
+        } @else {
+          Showing {{ (currentPage - 1) * itemsPerPage + 1 }} -
+          {{ Math.min(currentPage * itemsPerPage, totalCount) }} of {{ totalCount }} products
         }
-      }
+      </div>
+
+
     </div>
 
     <!-- Products Grid -->

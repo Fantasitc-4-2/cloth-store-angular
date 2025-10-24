@@ -1,7 +1,7 @@
 import productModel from "../model/Product.js";
 import mongoose from "mongoose";
 export const getAllProducts = async (limit, page, searchVal, price, categoryId) => {
-  const skip = (page - 1) * limit;
+  // Build match conditions
   const filter = {
     $or: [{
         title: {
@@ -28,53 +28,69 @@ export const getAllProducts = async (limit, page, searchVal, price, categoryId) 
     filter.category = new mongoose.Types.ObjectId(categoryId);
   }
 
-  const products = await productModel.aggregate([{
+  // First, count total documents for pagination
+  const totalCount = await productModel.countDocuments(filter);
+
+  // Then get paginated results with category and review info
+  const products = await productModel.aggregate([
+    {
       $match: filter
     },
     {
       $lookup: {
-        from: "reviews", // collection name (auto-created from model "Review")
+        from: "categories", // Join with categories collection
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryInfo"
+      }
+    },
+    {
+      $lookup: {
+        from: "reviews",
         localField: "_id",
         foreignField: "product",
-        as: "reviews",
-      },
+        as: "reviews"
+      }
     },
     {
       $addFields: {
-        reviewCount: {
-          $size: "$reviews"
-        },
+        categoryName: { $arrayElemAt: ["$categoryInfo.name", 0] },
+        reviewCount: { $size: "$reviews" },
         averageRating: {
-          $divide: [{
+          $divide: [
+            {
               $round: {
-                $multiply: [{
-                    $ifNull: [{
-                      $avg: "$reviews.ratings"
-                    }, 0]
-                  },
+                $multiply: [
+                  { $ifNull: [{ $avg: "$reviews.ratings" }, 0] },
                   2
                 ]
               }
             },
             2
           ]
-        },
-      },
+        }
+      }
     },
     {
       $project: {
-        reviews: 0, // exclude review list from response
-      },
+        reviews: 0,
+        categoryInfo: 0 // Remove the full category info array
+      }
     },
     {
-      $skip: skip
+      $skip: (page - 1) * limit
     },
     {
       $limit: limit
-    },
+    }
   ]);
 
-  return products;
+  return {
+    products,
+    total: totalCount,
+    currentPage: page,
+    pages: Math.ceil(totalCount / limit)
+  };
 };
 
 export const getProductById = async (id) => {

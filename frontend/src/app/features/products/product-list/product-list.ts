@@ -27,7 +27,13 @@ export class ProductList implements OnInit {
   totalCount = 0;
   hasNextPage = false;
   hasPrevPage = false;
-  itemsPerPage = 50;
+  // default to 9 items per page as requested
+  itemsPerPage = 9;
+  // sensible page-size options (9 is default)
+  pageSizes = [9, 18, 36];
+
+  // Expose Math to template for min/max operations
+  readonly Math = Math;
 
   // Search and filter properties
   searchTerm = '';
@@ -82,19 +88,21 @@ export class ProductList implements OnInit {
           console.log('✅ Processing paginated response');
           this.products = response.products;
           this.currentPage = response.currentPage || 1;
-          this.totalPages = response.totalPages || 1;
-          this.totalCount = response.totalCount || response.products.length;
-          this.hasNextPage = response.hasNextPage || false;
-          this.hasPrevPage = response.hasPrevPage || false;
+          // normalize total count (backend may use 'total' or 'totalCount')
+          this.totalCount = (response as any).totalCount ?? (response as any).total ?? response.products.length;
+          // compute total pages based on itemsPerPage
+          this.totalPages = Math.max(1, Math.ceil(this.totalCount / this.itemsPerPage));
+          this.hasNextPage = this.currentPage < this.totalPages;
+          this.hasPrevPage = this.currentPage > 1;
         } else if (Array.isArray(response)) {
           // Fallback: if API returns array directly instead of paginated response
           console.log('⚠️ API returned array directly, treating as page 1');
           this.products = response;
           this.currentPage = 1;
-          this.totalPages = 1;
+          this.totalPages = Math.max(1, Math.ceil(response.length / this.itemsPerPage));
           this.totalCount = response.length;
-          this.hasNextPage = false;
-          this.hasPrevPage = false;
+          this.hasNextPage = this.currentPage < this.totalPages;
+          this.hasPrevPage = this.currentPage > 1;
         } else {
           console.warn('❌ Unexpected response format:', response);
           this.products = [];
@@ -129,10 +137,10 @@ export class ProductList implements OnInit {
             console.log('✅ Fallback success:', data);
             this.products = data || [];
             this.currentPage = 1;
-            this.totalPages = 1;
             this.totalCount = this.products.length;
-            this.hasNextPage = false;
-            this.hasPrevPage = false;
+            this.totalPages = Math.max(1, Math.ceil(this.totalCount / this.itemsPerPage));
+            this.hasNextPage = this.currentPage < this.totalPages;
+            this.hasPrevPage = this.currentPage > 1;
             this.loading = false;
             this.isSearching = false;
           },
@@ -159,6 +167,16 @@ export class ProductList implements OnInit {
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadProducts();
+  }
+
+  onPageSizeChange(eventOrSize: any): void {
+    // Accept either a number or a change event
+    const newSize = typeof eventOrSize === 'number' ? eventOrSize : Number(eventOrSize.target?.value ?? eventOrSize);
+    if (!isNaN(newSize) && newSize > 0 && newSize !== this.itemsPerPage) {
+      this.itemsPerPage = newSize;
+      this.currentPage = 1; // reset page when page size changes
+      this.loadProducts();
+    }
   }
 
   onSearchChange(searchTerm: string): void {
