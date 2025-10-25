@@ -28,6 +28,7 @@ router.post("/logout", controller.logout);
 router.get("/me", auth, controller.me);
 router.post("/verify-otp", controller.verifyOtp);
 router.put("/update", auth, controller.updateUser);
+router.post("/google", controller.authGoogle);
 
 
 export default router;
