@@ -33,25 +33,20 @@ interface ProductResponse {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    CommonModule,
-    CarouselModule,
-    ButtonModule,
-    TagModule
-  ],
+  imports: [CommonModule, CarouselModule, ButtonModule, TagModule],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrl: './home.css',
 })
 export class Home implements OnInit {
   products: Product[] = [];
   loading: boolean = true;
-  
+
   slider1Index: number = 0;
   slider1Products: Product[] = [];
-  
+
   slider2Index: number = 0;
   slider2Products: Product[] = [];
-  
+
   slider3Products: Product[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -61,18 +56,17 @@ export class Home implements OnInit {
   }
 
   loadProducts(): void {
-    this.http.get<ProductResponse>(`${environment.apiUrl}/products`)
-      .subscribe({
-        next: (response) => {
-          this.products = response.products;
-          this.updateAllSliders();
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error loading products:', error);
-          this.loading = false;
-        }
-      });
+    this.http.get<ProductResponse>(`${environment.apiUrl}/products`).subscribe({
+      next: (response) => {
+        this.products = response.products;
+        this.updateAllSliders();
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading products:', error);
+        this.loading = false;
+      },
+    });
   }
 
   updateAllSliders(): void {
@@ -141,15 +135,13 @@ export class Home implements OnInit {
     }
   }
 
-  // addToCart(product: Product): void {
-  //   console.log('Added to cart:', product);
-  //   
-  // }
+  addToCart(product: Product): void {
+    console.log('Added to cart:', product);
+  }
 
-  // addToWishlist(product: Product): void {
-  //   console.log('Added to wishlist:', product);
-  //   
-  // }
+  addToWishlist(product: Product): void {
+    console.log('Added to wishlist:', product);
+  }
 
   goToProductDetails(productId: string): void {
     this.router.navigate(['/products', productId]);
