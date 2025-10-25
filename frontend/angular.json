@@ -22,11 +22,11 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
-            ]
+          "styles": [
+  "src/custom-theme.scss",
+  "src/styles.css",
+  "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+]
           },
           "configurations": {
             "production": {

@@ -1,73 +1,100 @@
-
-
 <div class="m-10">
-    
   @if (loading) {
   <div class="col-span-12 text-center py-20">Loading product…</div>
   } @else if (error) {
   <div class="col-span-12 text-center text-red-600 py-20">{{ error }}</div>
   } @else if (product) {
-    <nav class="text-sm text-gray-500 mb-4">
-  <span class="cursor-pointer hover:text-gray-800" routerLink="/">Home</span>
-  <span class="mx-2">/</span>
-  <span class="cursor-pointer transition-all hover:scale-110 text-gray-800 font-medium" routerLink="/products">Products</span>
-  <span class="mx-2">/</span>
-  <span class="text-gray-800 font-medium">{{product.title}}</span>
-</nav>
+  <nav class="text-sm text-gray-500 mb-4">
+    <span class="cursor-pointer hover:text-gray-800" routerLink="/">Home</span>
+    <span class="mx-2">/</span>
+    <span
+      class="cursor-pointer transition-all hover:scale-110 text-gray-800 font-medium"
+      routerLink="/products"
+      >Products</span
+    >
+    <span class="mx-2">/</span>
+    <span class="text-gray-800 font-medium">{{ product.title }}</span>
+  </nav>
   <!-- PRODUCT IMAGES -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 lg:p-8 max-w-7xl mx-auto">
-  <div class="lg:col-span-8 p-5 m-5">
-    <div class="grid grid-cols-5 gap-4">
-      <div class="col-span-5 md:col-span-4 hover:scale-105 z-10 transition-all duration-700">
-        <img
-          [src]="product.image || './product-1.jpg'"
-          [alt]="product.title || 'Product image'"
-          class="w-full h-auto cursor-zoom-in"
-        />
-      </div>
-      <div class="col-span-5 md:col-span-1">
-        <div class="grid grid-cols-4 md:grid-cols-1 gap-4">
-          @for (thumb of product.sizes?.slice(0,4); track $index) {
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 lg:p-8 max-w-7xl mx-auto">
+    <div class="lg:col-span-8 p-5 m-5">
+      <div class="grid grid-cols-5 gap-4">
+        <div class="col-span-5 md:col-span-4 hover:scale-105 z-10 transition-all duration-700">
           <img
             [src]="product.image || './product-1.jpg'"
-            [alt]="(product.title || 'thumb') + ' ' + $index"
-            class="w-full h-auto object-cover cursor-pointer hover:scale-125 transition-all opacity-75 hover:opacity-100 duration-300"
+            [alt]="product.title || 'Product image'"
+            class="w-full h-auto cursor-zoom-in"
           />
-          }
+        </div>
+        <div class="col-span-5 md:col-span-1">
+          <div class="grid grid-cols-4 md:grid-cols-1 gap-4">
+            @for (thumb of product.sizes?.slice(0,4); track $index) {
+            <img
+              [src]="product.image || './product-1.jpg'"
+              [alt]="(product.title || 'thumb') + ' ' + $index"
+              class="w-full h-auto object-cover cursor-pointer hover:scale-125 transition-all opacity-75 hover:opacity-100 duration-300"
+            />
+            }
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- PRODUCT DETAILS -->
-  <div class="lg:col-span-4 bg-[#f6f2f2] p-10 border-2 border-gray-300">
-    <div class="space-y-6">
-      <div>
-        <h2 class="text-xl lg:text-3xl font-semibold">{{ product.title }}</h2>
-        <p class="text-md lg:text-2xl font-bold mt-2">
-          {{ product.price | currency : 'USD' : 'symbol' }}
-        </p>
-        <p class="text-xs lg:text-sm text-gray-500 mt-1">MRP incl. of all taxes</p>
-      </div>
+    <!-- PRODUCT DETAILS -->
+    <div class="lg:col-span-4 bg-[#f6f2f2] p-10 border-2 border-gray-300">
+      <div class="space-y-6">
+        <div>
+          <h2 class="text-xl lg:text-3xl font-semibold">{{ product.title }}</h2>
+          <p class="text-md lg:text-2xl font-bold mt-2">
+            {{ product.price | currency : 'USD' : 'symbol' }}
+          </p>
+          <p class="text-xs lg:text-sm text-gray-500 mt-1">MRP incl. of all taxes</p>
+        </div>
 
-      <div>
-        <p class="text-gray-600 text-xs lg:text-sm">{{ product.description }}</p>
-      </div>
+        <div>
+          <p class="text-gray-600 text-xs lg:text-sm">{{ product.description }}</p>
+        </div>
 
-      <div>
-        <h3 class="text-sm font-medium mb-3">Availability</h3>
-        <p class="text-sm">{{ product.quantity || 0 }} in stock • {{ product.sold || 0 }} sold</p>
-      </div>
+        <div>
+          <h3 class="text-sm font-medium mb-3">Availability</h3>
+          <p class="text-sm">{{ product.quantity || 0 }} in stock • {{ product.sold || 0 }} sold</p>
+        </div>
 
-      <div>
-        <button
-          class="w-full bg-gray-200 text-black py-3 hover:scale-105 font-medium hover:bg-green-300 active:bg-green-400 transition-all duration-300"
+        <!-- Success/Error Message -->
+        @if (addToCartMessage) {
+        <div
+          [class.bg-green-100]="addToCartSuccess"
+          [class.border-green-400]="addToCartSuccess"
+          [class.text-green-700]="addToCartSuccess"
+          [class.bg-red-100]="!addToCartSuccess"
+          [class.border-red-400]="!addToCartSuccess"
+          [class.text-red-700]="!addToCartSuccess"
+          class="border px-4 py-3 rounded relative"
+          role="alert"
         >
-          ADD TO CART
-        </button>
+          <span class="block sm:inline">{{ addToCartMessage }}</span>
+        </div>
+        }
+
+        <div>
+          <button
+            (click)="addToCart()"
+            [disabled]="addingToCart || (product.quantity && product.quantity <= 0)"
+            [class.opacity-50]="addingToCart || (product.quantity && product.quantity <= 0)"
+            [class.cursor-not-allowed]="addingToCart || (product.quantity && product.quantity <= 0)"
+            class="w-full bg-gray-200 text-black py-3 hover:scale-105 font-medium hover:bg-green-300 active:bg-green-400 transition-all duration-300 disabled:hover:scale-100 disabled:hover:bg-gray-200"
+          >
+            @if (addingToCart) {
+            <span>ADDING...</span>
+            } @else if (product.quantity && product.quantity <= 0) {
+            <span>OUT OF STOCK</span>
+            } @else {
+            <span>ADD TO CART</span>
+            }
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   </div>
   }
 </div>
