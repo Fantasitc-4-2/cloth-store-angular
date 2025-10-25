@@ -45,6 +45,7 @@ export const routes: Routes = [
   },
   {
     path: 'checkout',
-    loadComponent: () => import('./features/checkout/checkout').then((m) => m.Checkout),
+    loadChildren: () =>
+      import('./features/checkout/checkout.routes').then((m) => m.CHECKOUT_ROUTES),
   },
 ];

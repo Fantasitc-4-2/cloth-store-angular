@@ -13,11 +13,13 @@
     <span class="font-bold">$266.00</span>
   </div>
   <div class="flex justify-start gap-1">
-    <input type="checkbox" class="w-8" />
+    <input type="checkbox" class="w-8" [(ngModel)]="isAgreed" />
     <label class="text-gray-600 ml-2 text-xs font-bold">I agree to the terms and conditions</label>
   </div>
   <button
     class="bg-gray-300 text-black uppercase py-3 mt-6 hover:bg-gray-400 transform transition-all duration-300"
+    [disabled]="!isAgreed"
+    (click)="goToPayment()"
   >
     proceed to checkout
   </button>

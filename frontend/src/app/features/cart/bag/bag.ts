@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CartProducts } from '../../../components/cart-products/cart-products';
 import { SummaryCard } from '../../../components/summary-card/summary-card';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-bag',
@@ -8,4 +9,22 @@ import { SummaryCard } from '../../../components/summary-card/summary-card';
   templateUrl: './bag.html',
   styleUrl: './bag.css',
 })
-export class Bag {}
+export class Bag implements OnInit {
+  cartItems: any[] = [];
+
+  constructor(private cartService: CartService) {}
+
+  ngOnInit() {
+    this.loadCart();
+  }
+
+  loadCart() {
+    this.cartService.getCart().subscribe({
+      next: (data) => {
+        this.cartItems = data;
+        console.log('Cart items:', this.cartItems);
+      },
+      error: (err) => console.error('Error fetching cart products:', err),
+    });
+  }
+}
