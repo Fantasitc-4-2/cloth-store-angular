@@ -25,13 +25,11 @@
   }
 }
 
-/* Card hover effects */
 .border:hover {
   transform: translateY(-2px);
   transition: all 0.3s ease;
 }
 
-/* Image container */
 .relative img {
   transition: transform 0.3s ease;
 }
@@ -40,7 +38,6 @@
   transform: scale(1.05);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   :host ::ng-deep .p-carousel {
     .p-carousel-prev-icon,

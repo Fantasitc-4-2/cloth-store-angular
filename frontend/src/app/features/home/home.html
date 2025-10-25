@@ -1,4 +1,3 @@
-<!-- Loading State -->
 <div *ngIf="loading" class="text-center py-8">
   <i class="pi pi-spin pi-spinner text-4xl"></i>
   <p class="mt-4">Loading products...</p>
@@ -6,11 +5,9 @@
 
 <div *ngIf="!loading && products.length > 0">
   
-  <!-- First Slider: New Collection -->
   <div class="container mx-auto px-4 py-8">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       
-      <!-- Left Section: Title and Controls -->
       <div class="flex flex-col justify-between">
         <div class="mb-20 lg:mb-44">
           <h1 class="text-3xl lg:text-[48px] uppercase font-bold">New Collection</h1>
@@ -21,7 +18,6 @@
         </div>
 
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 px-4 py-2">
-          <!-- Go To Shop Button -->
           <div
             (click)="goToProductsPage()"
             class="bg-[#D9D9D9] px-10 flex gap-4 py-2 cursor-pointer hover:bg-[#c9c9c9] transition-colors"
@@ -30,7 +26,6 @@
             <button><i class="fa-solid fa-arrow-right-long"></i></button>
           </div>
 
-          <!-- Navigation Buttons -->
           <div>
             <button
               (click)="prevSlider1()"
@@ -48,13 +43,11 @@
         </div>
       </div>
 
-      <!-- Product Cards (2 visible products) -->
       <div
         *ngFor="let product of slider1Products"
         class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
         (click)="goToProductDetails(product._id)"
       >
-        <!-- Product Image -->
         <div class="relative mb-4">
           <img
             [src]="product.image"
@@ -63,14 +56,12 @@
             (error)="$any($event.target).src = 'https://via.placeholder.com/300x300?text=No+Image'"
           />
 
-          <!-- Stock Status Badge -->
           <p-tag
             [value]="getInventoryStatus(product.quantity)"
             [severity]="getSeverity(getInventoryStatus(product.quantity))"
             class="absolute top-2 left-2"
           />
 
-          <!-- Discount Badge -->
           <span
             *ngIf="product.discountRate"
             class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded text-sm font-semibold"
@@ -86,7 +77,6 @@
           }}</span>
         </div> -->
 
-        <!-- Product Title -->
         <div class="mb-3 font-semibold text-lg h-14 overflow-hidden">
           {{ product.title }}
         </div>
@@ -105,7 +95,6 @@
           </div>
         </div> -->
 
-        <!-- Price and Actions -->
         <div class="flex justify-between items-center">
           <div class="flex flex-col">
             <div class="font-bold text-2xl text-green-600">
@@ -132,7 +121,6 @@
           </div>
         </div>
 
-        <!-- Stock Info -->
         <div class="mt-3 text-xs text-gray-500">
           <span *ngIf="product.quantity > 0">{{ product.quantity }} in stock</span>
           <span *ngIf="product.quantity === 0" class="text-red-500 font-semibold">Out of stock</span>
@@ -141,21 +129,18 @@
     </div>
   </div>
 
-  <!-- Second Slider: New This Week -->
   <div class="container mx-auto px-4 py-8 mt-16">
     <h1 class="text-3xl lg:text-[48px] uppercase font-bold mb-8">
       New <br />
       This week
     </h1>
 
-    <!-- Products Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
       <div
         *ngFor="let product of slider2Products"
         class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
         (click)="goToProductDetails(product._id)"
       >
-        <!-- Product Image -->
         <div class="relative mb-3">
           <img
             [src]="product.image"
@@ -164,7 +149,6 @@
             (error)="$any($event.target).src = 'https://via.placeholder.com/200x200?text=No+Image'"
           />
 
-          <!-- Discount Badge -->
           <span
             *ngIf="product.discountRate"
             class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold"
@@ -173,12 +157,10 @@
           </span>
         </div>
 
-        <!-- Product Title -->
         <div class="mb-2 font-semibold text-sm h-10 overflow-hidden">
           {{ product.title }}
         </div>
 
-        <!-- Price -->
         <div class="flex flex-col">
           <div class="font-bold text-lg text-green-600">
             ${{ product.discountPrice || product.price }}
@@ -190,7 +172,6 @@
       </div>
     </div>
 
-    <!-- Navigation Buttons -->
     <div class="flex justify-center items-center">
       <div>
         <button
@@ -209,21 +190,18 @@
     </div>
   </div>
 
-  <!-- Third Slider: XIV Collections -->
   <div class="container mx-auto px-4 py-8 mt-16">
     <h1 class="text-3xl lg:text-[48px] uppercase font-bold mb-8">
       XIV <br />
       Collections
     </h1>
 
-    <!-- Products Grid -->
     <div class="flex flex-col md:flex-row justify-center items-center gap-6 lg:gap-10 mb-8">
       <div
         *ngFor="let product of slider3Products"
         class="w-full md:w-1/3 bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
         (click)="goToProductDetails(product._id)"
       >
-        <!-- Product Image -->
         <div class="relative mb-4">
           <img
             [src]="product.image"
@@ -232,14 +210,12 @@
             (error)="$any($event.target).src = 'https://via.placeholder.com/300x300?text=No+Image'"
           />
 
-          <!-- Stock Status Badge -->
           <p-tag
             [value]="getInventoryStatus(product.quantity)"
             [severity]="getSeverity(getInventoryStatus(product.quantity))"
             class="absolute top-2 left-2"
           />
 
-          <!-- Discount Badge -->
           <span
             *ngIf="product.discountRate"
             class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded text-sm font-semibold"
@@ -248,19 +224,16 @@
           </span>
         </div>
 
-        <!-- Category -->
         <div class="mb-2">
           <span class="text-xs text-gray-500 uppercase font-semibold">{{
             product.categoryName
           }}</span>
         </div>
 
-        <!-- Product Title -->
         <div class="mb-3 font-semibold text-lg h-14 overflow-hidden">
           {{ product.title }}
         </div>
 
-        <!-- Price and Actions -->
         <div class="flex justify-between items-center">
           <div class="flex flex-col">
             <div class="font-bold text-2xl text-green-600">
@@ -289,7 +262,6 @@
       </div>
     </div>
 
-    <!-- More Button -->
     <div
       (click)="goToProductsPage()"
       class="flex flex-col justify-center items-center mt-8 cursor-pointer hover:text-gray-600 transition-colors"
@@ -304,7 +276,6 @@
   </div>
 </div>
 
-<!-- Empty State -->
 <div *ngIf="!loading && products.length === 0" class="text-center py-8">
   <p class="text-gray-500">No products available at the moment.</p>
 </div>

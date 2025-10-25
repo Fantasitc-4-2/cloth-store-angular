@@ -46,15 +46,12 @@ export class Home implements OnInit {
   products: Product[] = [];
   loading: boolean = true;
   
-  // Slider 1: New Collection (shows 2 products)
   slider1Index: number = 0;
   slider1Products: Product[] = [];
   
-  // Slider 2: New This Week (shows 6 products)
   slider2Index: number = 0;
   slider2Products: Product[] = [];
   
-  // Slider 3: XIV Collections (shows 3 products)
   slider3Products: Product[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -84,7 +81,6 @@ export class Home implements OnInit {
     this.updateSlider3();
   }
 
-  // Slider 1: New Collection
   updateSlider1(): void {
     this.slider1Products = this.products.slice(this.slider1Index, this.slider1Index + 2);
   }
@@ -103,7 +99,6 @@ export class Home implements OnInit {
     }
   }
 
-  // Slider 2: New This Week
   updateSlider2(): void {
     this.slider2Products = this.products.slice(this.slider2Index, this.slider2Index + 6);
   }
@@ -122,9 +117,7 @@ export class Home implements OnInit {
     }
   }
 
-  // Slider 3: XIV Collections
   updateSlider3(): void {
-    // Show last 3 products for XIV Collections
     const startIndex = Math.max(0, this.products.length - 3);
     this.slider3Products = this.products.slice(startIndex, this.products.length);
   }
@@ -148,15 +141,15 @@ export class Home implements OnInit {
     }
   }
 
-  addToCart(product: Product): void {
-    console.log('Added to cart:', product);
-    // Implement your cart logic here
-  }
+  // addToCart(product: Product): void {
+  //   console.log('Added to cart:', product);
+  //   
+  // }
 
-  addToWishlist(product: Product): void {
-    console.log('Added to wishlist:', product);
-    // Implement your wishlist logic here
-  }
+  // addToWishlist(product: Product): void {
+  //   console.log('Added to wishlist:', product);
+  //   
+  // }
 
   goToProductDetails(productId: string): void {
     this.router.navigate(['/products', productId]);
