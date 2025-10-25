@@ -26,7 +26,8 @@ export const routes: Routes = [
   },
   {
     path: 'products/add',
-    loadComponent: () => import('./features/products/add-product/add-product').then(m => m.AddProduct)
+    loadComponent: () =>
+      import('./features/products/add-product/add-product').then((m) => m.AddProduct),
   },
   {
     path: 'profile',
@@ -40,5 +41,9 @@ export const routes: Routes = [
   {
     path: 'cart',
     loadChildren: () => import('./features/cart/cart.routes').then((m) => m.CART_ROUTES),
+  },
+  {
+    path: 'checkout',
+    loadComponent: () => import('./features/checkout/checkout').then((m) => m.Checkout),
   },
 ];
