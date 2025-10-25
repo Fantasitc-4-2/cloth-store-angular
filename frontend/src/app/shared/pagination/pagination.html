@@ -1,0 +1,30 @@
+<div class="pagination-container mb-5">
+  <button
+    (click)="onPageChange(currentPage - 1)"
+    [disabled]="!hasPrevPage"
+    class="pagination-button"
+    aria-label="Previous page"
+  >
+    ‹
+  </button>
+
+  @for (page of getPageNumbers(); track page) {
+    <button
+      (click)="onPageChange(page)"
+      class="pagination-button"
+      [class.active]="page === currentPage"
+      aria-current="{{ page === currentPage ? 'page' : null }}"
+    >
+      {{ page }}
+    </button>
+  }
+
+  <button
+    (click)="onPageChange(currentPage + 1)"
+    [disabled]="!hasNextPage"
+    class="pagination-button"
+    aria-label="Next page"
+  >
+    ›
+  </button>
+</div>
