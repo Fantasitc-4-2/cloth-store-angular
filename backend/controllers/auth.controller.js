@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import * as repository from "../repository/user.repository.js";
 import { generateOtp, sendOtpEmail } from "../services/mailService.js";
-
+import { OAuth2Client } from "google-auth-library";
 export const register = async (userData) => {
   const requiredFields = ["email", "password", "username", "phoneNumber"];
   for (const field of requiredFields) {
@@ -44,7 +44,6 @@ const createToken = (user) => {
     id: user._id.toString(),
     username: user.username,
     roles: user.roles,
-    email:user.email
   };
   return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "1d",
@@ -162,3 +161,38 @@ export const updateUser = async (req, res) => {
   }
 };
 
+export const authGoogle = async (req, res) => {
+  try {
+    const token = req.body.token;
+
+    if (!token) {
+      return res.status(400).json({error: "Token not provided"});
+    }
+    const client = new OAuth2Client("576816836547-ba0hv9i0hjfibacr81mvv1arc4851sv6.apps.googleusercontent.com");
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "576816836547-ba0hv9i0hjfibacr81mvv1arc4851sv6.apps.googleusercontent.com"
+    });
+    const user = await repository.getUserByEmail(ticket.payload.email);
+    if(!user) {
+      return res.status(404).json({error: "User can not be f0und"})
+    }
+    const userToken = createToken(user);
+    res.cookie("token", userToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    return res.json({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      roles: user.roles,
+    });
+
+}catch (err) {
+  console.log(err.message);
+  res.status(500).json({ error: "Server error" });
+}
+}
