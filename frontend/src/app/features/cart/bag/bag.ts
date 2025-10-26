@@ -11,6 +11,7 @@ import { CartService } from '../../../core/services/cart.service';
 })
 export class Bag implements OnInit {
   cartItems: any[] = [];
+  subTotal: number = 0;
 
   constructor(private cartService: CartService) {}
 
@@ -21,8 +22,9 @@ export class Bag implements OnInit {
   loadCart() {
     this.cartService.getCart().subscribe({
       next: (data) => {
-        this.cartItems = data;
-        console.log('Cart items:', this.cartItems);
+        this.cartItems = data.cartUser.items;
+        console.log('Cart items:', data.cartUser);
+        this.subTotal = data.cartUser.totalPrice;
       },
       error: (err) => console.error('Error fetching cart products:', err),
     });

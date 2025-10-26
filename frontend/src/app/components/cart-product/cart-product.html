@@ -1,35 +1,32 @@
 <div class="flex mr-6 w-full">
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-2">
     <div class="relative">
-      <span class="absolute right-[-2rem] text-gray-400"><i class="fa-solid fa-xmark"></i></span>
-      <img [src]="product.img" alt="" />
-      <button class="absolute bottom-1 right-1">
-        <span class="text-gray-400 bg-white w-[30px] h-[30px] flex justify-center items-center">
-          <i class="fa-regular fa-heart -rotate-45 text-xs"></i>
-        </span>
+      <button class="absolute right-[-2rem] text-gray-400" (click)="deleteProduct()">
+        <i class="fa-solid fa-xmark"></i>
       </button>
+      <img [src]="productDetails.image" alt="" class="w-60 h-80" />
     </div>
-    <span class="text-sm text-[#000000A8] font-bold">{{ product.category }}</span>
+    <!-- <span class="text-sm text-[#000000A8] font-bold">{{ product.category }}</span> -->
     <div class="flex justify-between text-black font-bold">
-      <h3>{{ product.name }}</h3>
+      <h3>{{ productDetails.title }}</h3>
       <p>${{ product.price }}</p>
     </div>
   </div>
   <div class="flex flex-col justify-center ml-4 items-center gap-2">
-    <span>{{ product.size }}</span>
-    <div class="bg-black w-5 h-5"></div>
+    <span>{{ productDetails.size }}</span>
+    <!-- <div class="bg-black w-5 h-5"></div> -->
     <div class="flex flex-col items-center border border-black rounded p-2 w-10">
-      <button class="hover:text-grey-600">
+      <button (click)="increaseQuantity()" class="hover:text-gray-600">
         <i class="fa-solid fa-plus"></i>
       </button>
 
-      <span class="py-1 border-y border-black w-full text-center">1</span>
+      <span class="py-1 border-y border-black w-full text-center">
+        {{ quantity }}
+      </span>
 
-      <button class="hover:text-grey-600">
+      <button (click)="decreaseQuantity()" class="hover:text-gray-600">
         <i class="fa-solid fa-minus"></i>
       </button>
     </div>
-
-    <span><i class="fa-solid fa-recycle"></i></span>
   </div>
 </div>
