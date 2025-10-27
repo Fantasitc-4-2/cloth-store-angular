@@ -42,12 +42,16 @@ export class Login implements OnInit{
           this.registerUser.getUserInfo().subscribe((userData) => {
             this.registerUser.setUser(userData as User);
             this.router.navigate(['/']);
+          console.log(res);
+          
           }, err => {
-            console.log(err.message);
+            console.log(err);
           })
         }
       },
       (err) => {
+        console.log(err);
+        
         switch (err.status) {
           case 401: {
             this.errorMessage = 'Invalid email or password';

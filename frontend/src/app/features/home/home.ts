@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { environment } from '../../../environments/environment';
+import { WishlistService } from '../../core/services/wishlist.service';
+import { Subject, takeUntil } from 'rxjs';
 
 interface Product {
   _id: string;
@@ -33,13 +37,16 @@ interface ProductResponse {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, CarouselModule, ButtonModule, TagModule],
+  imports: [CommonModule, CarouselModule, ButtonModule, TagModule, ToastModule],
+  providers: [MessageService],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
   products: Product[] = [];
   loading: boolean = true;
+  wishlistIds: Set<string> = new Set();
+  private destroy$ = new Subject<void>();
 
   slider1Index: number = 0;
   slider1Products: Product[] = [];
@@ -49,10 +56,29 @@ export class Home implements OnInit {
 
   slider3Products: Product[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private wishlistService: WishlistService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.subscribeToWishlist();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  subscribeToWishlist(): void {
+    this.wishlistService.wishlist$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(wishlistIds => {
+        this.wishlistIds = wishlistIds;
+      });
   }
 
   loadProducts(): void {
@@ -135,12 +161,68 @@ export class Home implements OnInit {
     }
   }
 
-  addToCart(product: Product): void {
-    console.log('Added to cart:', product);
+  isInWishlist(productId: string): boolean {
+    return this.wishlistIds.has(productId);
+  }
+
+  toggleWishlist(product: Product, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (this.isInWishlist(product._id)) {
+      this.removeFromWishlist(product);
+    } else {
+      this.addToWishlist(product);
+    }
   }
 
   addToWishlist(product: Product): void {
-    console.log('Added to wishlist:', product);
+    this.wishlistService.addToWishlist(product._id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `${product.title} added to wishlist`,
+          life: 3000
+        });
+      },
+      error: (error) => {
+        console.error('Error adding to wishlist:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to add to wishlist. Please try again.',
+          life: 3000
+        });
+      }
+    });
+  }
+
+  removeFromWishlist(product: Product): void {
+    this.wishlistService.removeFromWishlist(product._id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Removed',
+          detail: `${product.title} removed from wishlist`,
+          life: 3000
+        });
+      },
+      error: (error) => {
+        console.error('Error removing from wishlist:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to remove from wishlist. Please try again.',
+          life: 3000
+        });
+      }
+    });
+  }
+
+  addToCart(product: Product): void {
+    console.log('Added to cart:', product);
   }
 
   goToProductDetails(productId: string): void {

@@ -1,83 +1,77 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
-export interface AddToWishlistPayload {
-  productId: string;
-}
-
-export interface AddToWishlistResponse {
-  message: string;
-  wishlist?: any;
+interface Wishlist {
+  _id: string;
+  user: string;
+  products: any[];
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class WishlistService {
-  private baseUrl = `${environment.apiUrl}/wishlist`; // Singular or plural depending on your backend route
+  private wishlistSubject = new BehaviorSubject<Set<string>>(new Set());
+  public wishlist$ = this.wishlistSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    console.log('WishlistService using API base URL:', this.baseUrl);
+    this.loadWishlist();
   }
 
-  /**
-   * Add product to wishlist
-   */
-  addToWishlist(productId: string): Observable<AddToWishlistResponse> {
-    const payload: AddToWishlistPayload = { productId };
-
-    console.log('Adding to wishlist:', payload);
-
-    return this.http
-      .post<AddToWishlistResponse>(this.baseUrl, payload, {
-        withCredentials: true,
-      })
-      .pipe(
-        catchError((error) => {
-          console.error('Error adding to wishlist:', error);
-
-          if (error.status === 401) {
-            console.error('User not authenticated');
-          } else if (error.status === 404) {
-            console.error('Product not found');
-          }
-
-          return throwError(() => error);
-        })
-      );
+  loadWishlist(): void {
+    this.http.get<Wishlist>(`${environment.apiUrl}/wishlist`, {
+      withCredentials: true 
+    }).subscribe({
+      next: (response) => {
+        const productIds = new Set(
+          response.products?.map((p: any) => p._id || p) || []
+        );
+        this.wishlistSubject.next(productIds);
+      },
+      error: (error) => {
+        console.error('Error loading wishlist:', error);
+        this.wishlistSubject.next(new Set());
+      }
+    });
   }
 
-  /**
-   * Get user's wishlist
-   */
-  getWishlist(): Observable<any> {
-    return this.http
-      .get<any>(this.baseUrl, {
-        withCredentials: true,
+  addToWishlist(productId: string): Observable<Wishlist> {
+    return this.http.post<Wishlist>(
+      `${environment.apiUrl}/wishlist`, 
+      { productId },
+      { withCredentials: true } 
+    ).pipe(
+      tap((response) => {
+        const productIds = new Set(
+          response.products?.map((p: any) => p._id || p) || []
+        );
+        this.wishlistSubject.next(productIds);
       })
-      .pipe(
-        catchError((error) => {
-          console.error('Error fetching wishlist:', error);
-          return throwError(() => error);
-        })
-      );
+    );
   }
 
-  /**
-   * Remove product from wishlist
-   */
-  removeFromWishlist(productId: string): Observable<any> {
-    return this.http
-      .delete<any>(`${this.baseUrl}/${productId}`, {
-        withCredentials: true,
+  removeFromWishlist(productId: string): Observable<Wishlist> {
+    return this.http.delete<Wishlist>(
+      `${environment.apiUrl}/wishlist/${productId}`,
+      { withCredentials: true } 
+    ).pipe(
+      tap((response) => {
+        const productIds = new Set(
+          response.products?.map((p: any) => p._id || p) || []
+        );
+        this.wishlistSubject.next(productIds);
       })
-      .pipe(
-        catchError((error) => {
-          console.error('Error removing from wishlist:', error);
-          return throwError(() => error);
-        })
-      );
+    );
+  }
+
+  isInWishlist(productId: string): boolean {
+    return this.wishlistSubject.value.has(productId);
+  }
+
+  getWishlistIds(): Set<string> {
+    return this.wishlistSubject.value;
   }
 }

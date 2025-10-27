@@ -1,3 +1,5 @@
+<p-toast />
+
 <div *ngIf="loading" class="text-center py-8">
   <i class="pi pi-spin pi-spinner text-4xl"></i>
   <p class="mt-4">Loading products...</p>
@@ -70,30 +72,9 @@
           </span>
         </div>
 
-        <!-- Category -->
-        <!-- <div class="mb-2">
-          <span class="text-xs text-gray-500 uppercase font-semibold">{{
-            product.categoryName
-          }}</span>
-        </div> -->
-
         <div class="mb-3 font-semibold text-lg h-14 overflow-hidden">
           {{ product.title }}
         </div>
-
-        <!-- Product Description -->
-        <!-- <div class="mb-3 text-sm text-gray-600 h-12 overflow-hidden">
-          {{ product.description }}
-        </div> -->
-
-        <!-- Rating -->
-        <!-- <div class="flex items-center gap-2 mb-4">
-          <div class="flex items-center">
-            <i class="pi pi-star-fill text-yellow-500 text-sm"></i>
-            <span class="ml-1 text-sm font-semibold">{{ product.averageRating || 0 }}</span>
-            <span class="ml-1 text-xs text-gray-500">({{ product.reviewCount }})</span>
-          </div>
-        </div> -->
 
         <div class="flex justify-between items-center">
           <div class="flex flex-col">
@@ -107,11 +88,11 @@
 
           <div class="flex gap-2" (click)="$event.stopPropagation()">
             <p-button
-              icon="pi pi-heart"
-              [outlined]="true"
-              severity="secondary"
-              (onClick)="addToWishlist(product)"
-              [title]="'Add to Wishlist'"
+              [icon]="isInWishlist(product._id) ? 'pi pi-heart-fill' : 'pi pi-heart'"
+              [outlined]="!isInWishlist(product._id)"
+              [severity]="isInWishlist(product._id) ? 'danger' : 'secondary'"
+              (onClick)="toggleWishlist(product, $event)"
+              [title]="isInWishlist(product._id) ? 'Remove from Wishlist' : 'Add to Wishlist'"
             />
             <p-button
               icon="pi pi-shopping-cart"
@@ -155,6 +136,18 @@
           >
             -{{ product.discountRate }}%
           </span>
+
+          <!-- Wishlist heart icon for slider 2 -->
+          <button
+            (click)="toggleWishlist(product, $event)"
+            class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-shadow"
+            [title]="isInWishlist(product._id) ? 'Remove from Wishlist' : 'Add to Wishlist'"
+          >
+            <i 
+              [class]="isInWishlist(product._id) ? 'pi pi-heart-fill text-red-500' : 'pi pi-heart text-gray-600'"
+              class="text-lg"
+            ></i>
+          </button>
         </div>
 
         <div class="mb-2 font-semibold text-sm h-10 overflow-hidden">
@@ -246,11 +239,11 @@
 
           <div class="flex gap-2" (click)="$event.stopPropagation()">
             <p-button
-              icon="pi pi-heart"
-              [outlined]="true"
-              severity="secondary"
-              (onClick)="addToWishlist(product)"
-              [title]="'Add to Wishlist'"
+              [icon]="isInWishlist(product._id) ? 'pi pi-heart-fill' : 'pi pi-heart'"
+              [outlined]="!isInWishlist(product._id)"
+              [severity]="isInWishlist(product._id) ? 'danger' : 'secondary'"
+              (onClick)="toggleWishlist(product, $event)"
+              [title]="isInWishlist(product._id) ? 'Remove from Wishlist' : 'Add to Wishlist'"
             />
             <p-button
               icon="pi pi-shopping-cart"
