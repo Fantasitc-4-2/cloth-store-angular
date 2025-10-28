@@ -78,25 +78,19 @@ export class ProductService {
       httpParams = httpParams.set('price', params.price.toString());
     }
     if (params.sizes) {
-      if (Array.isArray(params.sizes)) {
-        params.sizes.forEach(s => {
-          httpParams = httpParams.append('sizes', s);
-        });
-      } else {
-        httpParams = httpParams.set('sizes', String(params.sizes));
-      }
+      const sizesValue = Array.isArray(params.sizes)
+        ? JSON.stringify(params.sizes.map(s => String(s).toLowerCase()))
+        : JSON.stringify([String(params.sizes).toLowerCase()]);
+      httpParams = httpParams.set('sizes', sizesValue);
     }
     if (params.availability !== undefined) {
       httpParams = httpParams.set('availability', String(params.availability));
     }
     if (params.colors) {
-      if (Array.isArray(params.colors)) {
-        params.colors.forEach(c => {
-          httpParams = httpParams.append('colors', c);
-        });
-      } else {
-        httpParams = httpParams.set('colors', String(params.colors));
-      }
+      const colorsValue = Array.isArray(params.colors)
+        ? JSON.stringify(params.colors)
+        : JSON.stringify([String(params.colors)]);
+      httpParams = httpParams.set('colors', colorsValue);
     }
     if (params.minPrice !== undefined) {
       httpParams = httpParams.set('minPrice', String(params.minPrice));
