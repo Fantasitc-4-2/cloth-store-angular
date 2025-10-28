@@ -115,10 +115,15 @@
 
     <div class="pt-3" *ngIf="ratingsOpen">
       <div class="space-y-2">
-        <label *ngFor="let r of [5,4,3,2,1]" class="flex items-center gap-2 text-sm cursor-pointer">
+        <label *ngFor="let r of [5,4,3,2,1]" class="flex items-center gap-2 text-sm cursor-pointer" [attr.aria-label]="r + ' out of 5 stars'">
           <input type="radio" name="rating" [value]="r" [(ngModel)]="selectedRating"
                  class="text-blue-600 border-gray-300 focus:ring-blue-500" />
-          <span>{{ r }} star{{ r>1 ? 's' : '' }}</span>
+          <span class="flex gap-1" aria-hidden="true">
+            <ng-container *ngFor="let i of [1,2,3,4,5]">
+              <span [class.text-yellow-400]="i <= r" [class.text-gray-300]="i > r" class="text-xl leading-none">★</span>
+            </ng-container>
+          </span>
+          <span class="sr-only">{{ r }} out of 5 stars</span>
         </label>
       </div>
     </div>
