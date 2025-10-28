@@ -1,8 +1,8 @@
-<div class="border border-gray-300 p-10 flex flex-col mt-4 w-[80vw] lg:w-[18vw] lg:p-12">
+<div class="border border-gray-300 p-10 flex flex-col mt-4 w-[80vw] lg:w-[18vw] lg:p-12 lg:mr-20">
   <h2 class="uppercase font-bold">order summary</h2>
   <div class="flex justify-between mt-6">
     <span class="text-black font-bold">Subtotal</span>
-    <span class="font-bold">$256.00</span>
+    <span class="font-bold">${{ subTotal }}</span>
   </div>
   <div class="flex justify-between border-b border-gray-400">
     <span class="text-black font-bold">Shipping</span>
@@ -10,7 +10,7 @@
   </div>
   <div class="flex justify-between mt-6 mb-10">
     <p class="text-black text-xl">Total <span class="text-gray-600 text-sm">(TAX INCL.)</span></p>
-    <span class="font-bold">$266.00</span>
+    <span class="font-bold">${{ total }}</span>
   </div>
   <div class="flex justify-start gap-1">
     <input type="checkbox" class="w-8" [(ngModel)]="isAgreed" />
