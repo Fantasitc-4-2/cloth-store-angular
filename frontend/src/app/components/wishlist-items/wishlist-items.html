@@ -3,6 +3,6 @@
 >
   @for (item of products; track item.id){
 
-  <app-wishlist-item [product]="item"></app-wishlist-item>
+  <app-wishlist-item [product]="item" (remove)="remove.emit($event)"></app-wishlist-item>
   }
 </div>

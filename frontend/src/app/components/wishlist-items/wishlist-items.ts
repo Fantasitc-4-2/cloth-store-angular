@@ -1,39 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { WishlistItem } from '../wishlist-item/wishlist-item';
 
 @Component({
   selector: 'app-wishlist-items',
-  imports: [WishlistItem],
+  standalone: true,
+  imports: [CommonModule, WishlistItem],
   templateUrl: './wishlist-items.html',
-  styleUrl: './wishlist-items.css',
+  styleUrls: ['./wishlist-items.css'],
 })
 export class WishlistItems {
-  products: Array<{
-    id: number;
-    name: string;
-    category: string;
-    price: number;
-    size: string;
-    color: string;
-    img: string;
-  }> = [
-    {
-      id: 1,
-      name: 'Sample Product',
-      category: 'Shirts',
-      price: 29.99,
-      size: 'M',
-      color: 'Red',
-      img: '/Rectangle 3.png',
-    },
-    {
-      id: 2,
-      name: 'Sample Product',
-      category: 'Shirts',
-      price: 40.99,
-      size: 'L',
-      color: 'Blue',
-      img: '/Rectangle 3.png',
-    },
-  ];
+  @Input() products: Array<any> = [];
+  @Output() remove = new EventEmitter<string>();
+
+  trackById(index: number, item: any) {
+    return item?._id ?? item?.id ?? index;
+  }
 }

@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true, // If you're using standalone components
   imports: [CommonModule, RouterModule],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css'
+  styleUrl: './navbar.css',
 })
 export class Navbar {
   isMobileMenuOpen = false;

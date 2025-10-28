@@ -1,18 +1,20 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-wishlist-item',
+  standalone: true,
   imports: [],
   templateUrl: './wishlist-item.html',
-  styleUrl: './wishlist-item.css',
+  styleUrls: ['./wishlist-item.css'],
 })
 export class WishlistItem {
-  @Input() product!: {
-    name: string;
-    category: string;
-    price: number;
-    size: string;
-    color: string;
-    img: string;
-  };
+  @Input() product!: any;
+  @Output() remove = new EventEmitter<string>();
+
+  onRemove() {
+    const id = this.product?._id ?? this.product?.id;
+    if (id != null) {
+      this.remove.emit(id.toString());
+    }
+  }
 }

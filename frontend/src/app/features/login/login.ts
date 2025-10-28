@@ -10,7 +10,7 @@ declare const google: any;
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login implements OnInit{
+export class Login implements OnInit {
   constructor(private registerUser: UserService, private router: Router) {}
   loginForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -18,40 +18,42 @@ export class Login implements OnInit{
   });
 
   errorMessage: string = 'All fields are required.';
-  
 
   ngOnInit(): void {
-      google.accounts.id.initialize({
+    google.accounts.id.initialize({
       client_id: environment.GOOGLE_CLIENT_ID,
       callback: (res: any) => this.handleGoogleResponse(res),
-  });
+    });
 
-  google.accounts.id.renderButton(
-    document.getElementById('g_id_signin'),
-    { theme: 'outline', size: 'large', width: '100%' }
-  );
+    google.accounts.id.renderButton(document.getElementById('g_id_signin'), {
+      theme: 'outline',
+      size: 'large',
+      width: '100%',
+    });
   }
   onSubmit() {
     if (!this.loginForm.valid) {
       return;
     }
-    this.errorMessage = "";
+    this.errorMessage = '';
     this.registerUser.authenticateUser(this.loginForm.value).subscribe(
       (res) => {
         if (res.status === 200) {
-          this.registerUser.getUserInfo().subscribe((userData) => {
-            this.registerUser.setUser(userData as User);
-            this.router.navigate(['/']);
-          console.log(res);
-          
-          }, err => {
-            console.log(err);
-          })
+          this.registerUser.getUserInfo().subscribe(
+            (userData) => {
+              this.registerUser.setUser(userData as User);
+              this.router.navigate(['/']);
+              console.log(res);
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
         }
       },
       (err) => {
         console.log(err);
-        
+
         switch (err.status) {
           case 401: {
             this.errorMessage = 'Invalid email or password';
@@ -62,7 +64,7 @@ export class Login implements OnInit{
             break;
           }
           default: {
-            this.errorMessage = "Error occurred. please try again later";
+            this.errorMessage = 'Error occurred. please try again later';
           }
         }
       }
@@ -76,10 +78,10 @@ export class Login implements OnInit{
         this.registerUser.setUser(data as User);
         this.router.navigate(['/']);
       },
-      err => {
+      (err) => {
         switch (err.status) {
           case 404: {
-            this.errorMessage = "No account is used with the google account";
+            this.errorMessage = 'No account is used with the google account';
             break;
           }
         }

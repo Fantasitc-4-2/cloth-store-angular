@@ -11,7 +11,7 @@ interface Wishlist {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WishlistService {
   private wishlistSubject = new BehaviorSubject<Set<string>>(new Set());
@@ -22,49 +22,49 @@ export class WishlistService {
   }
 
   loadWishlist(): void {
-    this.http.get<Wishlist>(`${environment.apiUrl}/wishlist`, {
-      withCredentials: true 
-    }).subscribe({
-      next: (response) => {
-        const productIds = new Set(
-          response.products?.map((p: any) => p._id || p) || []
-        );
-        this.wishlistSubject.next(productIds);
-      },
-      error: (error) => {
-        console.error('Error loading wishlist:', error);
-        this.wishlistSubject.next(new Set());
-      }
+    this.http
+      .get<Wishlist>(`${environment.apiUrl}/wishlist`, {
+        withCredentials: true,
+      })
+      .subscribe({
+        next: (response) => {
+          const productIds = new Set(response.products?.map((p: any) => p._id || p) || []);
+          this.wishlistSubject.next(productIds);
+        },
+        error: (error) => {
+          console.error('Error loading wishlist:', error);
+          this.wishlistSubject.next(new Set());
+        },
+      });
+  }
+
+  // return the raw wishlist Observable when callers need the full data
+  fetchWishlist(): Observable<Wishlist> {
+    return this.http.get<Wishlist>(`${environment.apiUrl}/wishlist`, {
+      withCredentials: true,
     });
   }
 
   addToWishlist(productId: string): Observable<Wishlist> {
-    return this.http.post<Wishlist>(
-      `${environment.apiUrl}/wishlist`, 
-      { productId },
-      { withCredentials: true } 
-    ).pipe(
-      tap((response) => {
-        const productIds = new Set(
-          response.products?.map((p: any) => p._id || p) || []
-        );
-        this.wishlistSubject.next(productIds);
-      })
-    );
+    return this.http
+      .post<Wishlist>(`${environment.apiUrl}/wishlist`, { productId }, { withCredentials: true })
+      .pipe(
+        tap((response) => {
+          const productIds = new Set(response.products?.map((p: any) => p._id || p) || []);
+          this.wishlistSubject.next(productIds);
+        })
+      );
   }
 
   removeFromWishlist(productId: string): Observable<Wishlist> {
-    return this.http.delete<Wishlist>(
-      `${environment.apiUrl}/wishlist/${productId}`,
-      { withCredentials: true } 
-    ).pipe(
-      tap((response) => {
-        const productIds = new Set(
-          response.products?.map((p: any) => p._id || p) || []
-        );
-        this.wishlistSubject.next(productIds);
-      })
-    );
+    return this.http
+      .delete<Wishlist>(`${environment.apiUrl}/wishlist/${productId}`, { withCredentials: true })
+      .pipe(
+        tap((response) => {
+          const productIds = new Set(response.products?.map((p: any) => p._id || p) || []);
+          this.wishlistSubject.next(productIds);
+        })
+      );
   }
 
   isInWishlist(productId: string): boolean {

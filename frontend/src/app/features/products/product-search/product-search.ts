@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 import { CategoryService, Category } from '../../../core/services/category.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-product-search',
   imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './product-search.html',
-  styleUrl: './product-search.css'
+  styleUrl: './product-search.css',
 })
 export class ProductSearch implements OnInit {
   @Input() searchTerm: string = '';
@@ -29,7 +29,7 @@ export class ProductSearch implements OnInit {
       },
       error: (err) => {
         console.error('Error loading categories:', err);
-      }
+      },
     });
   }
 
