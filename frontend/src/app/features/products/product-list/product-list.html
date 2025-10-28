@@ -8,7 +8,7 @@
 <div class="grid grid-cols-12 mt-10">
   <!-- Sidebar -->
   <div class="col-span-6 sm:col-span-6 lg:col-span-3 me-5 mt-20">
-    <app-sidebar></app-sidebar>
+    <app-sidebar (filtersChange)="onSidebarFilters($event)"></app-sidebar>
   </div>
 
   <!-- Products Section -->
@@ -31,8 +31,9 @@
           {{ Math.min(currentPage * itemsPerPage, totalCount) }} of {{ totalCount }} products
         }
       </div>
-
-
+      <a *ngIf="filtersActive" [routerLink]="['/products']" (click)="$event.preventDefault(); clearFilters();" class="px-3 mt-3 py-1.5 text-sm border border-gray-400 rounded hover:bg-gray-900 hover:text-white transition cursor-pointer">
+        Clear filters
+      </a>
     </div>
 
     <!-- Products Grid -->

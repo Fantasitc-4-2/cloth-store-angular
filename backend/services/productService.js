@@ -6,14 +6,24 @@ export const getAllProducts = async (
   page,
   searchVal,
   price,
-  category
+  category,
+  sizes,
+  availability,
+  colors,
+  minPrice,
+  maxPrice
 ) => {
   return await productRepository.getAllProducts(
     limit,
     page,
     searchVal,
     price,
-    category
+    category,
+    sizes,
+    availability,
+    colors,
+    minPrice,
+    maxPrice
   );
 };
 

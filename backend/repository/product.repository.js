@@ -1,6 +1,6 @@
 import productModel from "../model/Product.js";
 import mongoose from "mongoose";
-export const getAllProducts = async (limit, page, searchVal, price, categoryId) => {
+export const getAllProducts = async (limit, page, searchVal, price, categoryId, sizes, availability, colors, minPrice, maxPrice) => {
   // Build match conditions
   const filter = {
     $or: [{
@@ -18,14 +18,50 @@ export const getAllProducts = async (limit, page, searchVal, price, categoryId) 
     ],
   };
 
-  if (price !== undefined && !isNaN(price)) {
-    filter.price = {
-      $lte: Number(price)
-    };
+  // Price filtering: support minPrice/maxPrice range or legacy `price` (max)
+  if ((minPrice !== undefined && !isNaN(minPrice)) || (maxPrice !== undefined && !isNaN(maxPrice))) {
+    filter.price = {};
+    if (minPrice !== undefined && !isNaN(minPrice)) filter.price.$gte = Number(minPrice);
+    if (maxPrice !== undefined && !isNaN(maxPrice)) filter.price.$lte = Number(maxPrice);
+  } else if (price !== undefined && !isNaN(price)) {
+    filter.price = { $lte: Number(price) };
   }
 
   if (categoryId) {
     filter.category = new mongoose.Types.ObjectId(categoryId);
+  }
+
+  // Sizes: accept array or comma-separated string
+  if (sizes) {
+    let sizesArr = sizes;
+    if (typeof sizes === 'string') {
+      sizesArr = sizes.split(',').map(s => s.trim()).filter(Boolean);
+    }
+    if (Array.isArray(sizesArr) && sizesArr.length) {
+      filter.sizes = { $in: sizesArr };
+    }
+  }
+
+  // Colors: accept array or comma-separated string
+  if (colors) {
+    let colorsArr = colors;
+    if (typeof colors === 'string') {
+      colorsArr = colors.split(',').map(c => c.trim()).filter(Boolean);
+    }
+    if (Array.isArray(colorsArr) && colorsArr.length) {
+      filter.colors = { $in: colorsArr };
+    }
+  }
+
+  // Availability: if truthy -> quantity > 0, if explicitly false -> quantity == 0
+  if (availability !== undefined && availability !== null) {
+    // allow string values 'true'/'false' from query strings
+    const avail = (typeof availability === 'string') ? (availability === 'true') : Boolean(availability);
+    if (avail) {
+      filter.quantity = { $gt: 0 };
+    } else {
+      filter.quantity = 0;
+    }
   }
 
   // First, count total documents for pagination

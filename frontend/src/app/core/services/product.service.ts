@@ -10,6 +10,12 @@ export interface ProductQueryParams {
   search?: string;
   category?: string;
   price?: number;
+  sizes?: string[];
+  availability?: string | boolean;
+  colors?: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  rating?: number;
 }
 
 export interface PaginatedProductsResponse {
@@ -70,6 +76,36 @@ export class ProductService {
     }
     if (params.price) {
       httpParams = httpParams.set('price', params.price.toString());
+    }
+    if (params.sizes) {
+      if (Array.isArray(params.sizes)) {
+        params.sizes.forEach(s => {
+          httpParams = httpParams.append('sizes', s);
+        });
+      } else {
+        httpParams = httpParams.set('sizes', String(params.sizes));
+      }
+    }
+    if (params.availability !== undefined) {
+      httpParams = httpParams.set('availability', String(params.availability));
+    }
+    if (params.colors) {
+      if (Array.isArray(params.colors)) {
+        params.colors.forEach(c => {
+          httpParams = httpParams.append('colors', c);
+        });
+      } else {
+        httpParams = httpParams.set('colors', String(params.colors));
+      }
+    }
+    if (params.minPrice !== undefined) {
+      httpParams = httpParams.set('minPrice', String(params.minPrice));
+    }
+    if (params.maxPrice !== undefined) {
+      httpParams = httpParams.set('maxPrice', String(params.maxPrice));
+    }
+    if (params.rating !== undefined) {
+      httpParams = httpParams.set('rating', String(params.rating));
     }
 
     const url = this.baseUrl;

@@ -14,10 +14,26 @@ router.get("/", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const searchVal = req.query.search || "";
-    const category = req.query.category
+    const category = req.query.category;
     const price = req.query.price;
+    const sizes = req.query.sizes; // comma-separated or repeated param
+    const availability = req.query.availability; // 'true' or 'false'
+    const colors = req.query.colors; // comma-separated or repeated param
+    const minPrice = req.query.minPrice;
+    const maxPrice = req.query.maxPrice;
 
-    const products = await productService.getAllProducts(limit, page, searchVal, price,category);
+    const products = await productService.getAllProducts(
+      limit,
+      page,
+      searchVal,
+      price,
+      category,
+      sizes,
+      availability,
+      colors,
+      minPrice,
+      maxPrice
+    );
     res.status(200).send(products);
   } catch (e) {
     console.error(e.message);

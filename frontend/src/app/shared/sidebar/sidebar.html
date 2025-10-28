@@ -6,7 +6,8 @@
     <h4 class="font-semibold text-sm mb-2">Size</h4>
     <div class="flex flex-wrap gap-2">
       <button *ngFor="let size of sizes"
-              class="px-3 py-1.5 text-sm border border-gray-500 hover:shadow-lg hover:-translate-y-0.5 transition-all bg-transparent">
+              (click)="toggleSize(size)"
+              [class]="'px-3 py-1.5 text-sm border hover:shadow-lg hover:-translate-y-0.5 transition-all bg-transparent ' + (selectedSizes.includes(size) ? 'border-blue-600 bg-blue-50' : 'border-gray-500')">
         {{ size }}
       </button>
     </div>
@@ -19,18 +20,12 @@
       <i class="fa-solid text-gray-500 text-sm" [ngClass]="{ 'fa-chevron-down': !availabilityOpen, 'fa-chevron-up': availabilityOpen }"></i>
     </div>
 
-    <div class="pt-3" *ngIf="availabilityOpen">
-      <label class="flex items-center gap-2 text-sm mb-2">
-        <input type="checkbox" class="rounded border-gray-300" />
-        <span>Availability</span>
-        <span class="text-gray-500 text-xs">(450)</span>
-      </label>
-
-      <label class="flex items-center gap-2 text-sm">
-        <input type="checkbox" class="rounded border-gray-300" />
-        <span>Out of Stock</span>
-        <span class="text-gray-500 text-xs">(18)</span>
-      </label>
+      <div class="pt-3" *ngIf="availabilityOpen">
+      <div class="flex flex-col">
+        <button (click)="setAvailability(null)" class="text-sm text-left py-1">All</button>
+        <button (click)="setAvailability(true)" class="text-sm text-left py-1">In Stock</button>
+        <button (click)="setAvailability(false)" class="text-sm text-left py-1">Out of Stock</button>
+      </div>
     </div>
   </div>
 
@@ -45,12 +40,19 @@
       <div class="flex flex-wrap gap-2">
         <button *ngFor="let col of colors"
                 (click)="selectColor(col)"
-                [class]="'w-8 h-8 rounded-md border border-gray-200 p-0 transition-all hover:shadow-lg hover:-translate-y-0.5 ' + (selectedColor === col ? 'ring-2 ring-blue-200 ring-offset-1 -translate-y-0.5' : '')"
+                [class]="'w-8 h-8 rounded-md p-0 transition-all hover:shadow-lg hover:-translate-y-0.5 ' + (selectedColors.includes(col) ? 'ring-2 ring-blue-200 ring-offset-1 border-transparent -translate-y-0.5' : 'border border-gray-200')"
                 [style.background]="col.toLowerCase() === 'white' ? '#fff' : col.toLowerCase()"
                 [attr.title]="col">
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- Clear Filters -->
+  <div class="mt-4">
+    <button *ngIf="(selectedSizes.length || selectedColors.length || availability !== null || minPrice || maxPrice || selectedRating || selectedCategory)"
+            (click)="clearFilters()"
+            class="w-full px-3 py-2 bg-red-600 text-white rounded text-sm hover:bg-red-700">Clear filters</button>
   </div>
 
   <!-- Price Range -->
@@ -66,6 +68,9 @@
                class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-md focus:ring-1 focus:ring-gray-300 outline-none" />
         <input type="number" [(ngModel)]="maxPrice" placeholder="Max"
                class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-md focus:ring-1 focus:ring-gray-300 outline-none" />
+      </div>
+      <div class="mt-2">
+        <button (click)="applyPriceRange()" class="px-3 py-1 rounded bg-blue-600 text-white text-sm">Apply</button>
       </div>
     </div>
   </div>
@@ -117,6 +122,7 @@
       <div class="space-y-2">
         <label *ngFor="let r of [5,4,3,2,1]" class="flex items-center gap-2 text-sm cursor-pointer" [attr.aria-label]="r + ' out of 5 stars'">
           <input type="radio" name="rating" [value]="r" [(ngModel)]="selectedRating"
+                 (change)="onRatingChange()"
                  class="text-blue-600 border-gray-300 focus:ring-blue-500" />
           <span class="flex gap-1" aria-hidden="true">
             <ng-container *ngFor="let i of [1,2,3,4,5]">

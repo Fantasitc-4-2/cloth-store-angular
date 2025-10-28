@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from "../../../shared/sidebar/sidebar";
@@ -7,12 +7,12 @@ import { ProductSearch } from "../product-search/product-search";
 import { Pagination } from "../../../shared/pagination/pagination";
 import { ProductService, ProductQueryParams, PaginatedProductsResponse } from '../../../core/services/product.service';
 import { Product } from '../../../models/product.model';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
-  imports: [CommonModule, FormsModule, Sidebar, ProductCard, ProductSearch, Pagination],
+  imports: [CommonModule, FormsModule, RouterLink, Sidebar, ProductCard, ProductSearch, Pagination],
   templateUrl: './product-list.html',
   styleUrls: ['./product-list.css']
 })
@@ -47,6 +47,10 @@ export class ProductList implements OnInit {
     limit: 50
   };
 
+  // Sidebar filters
+  private sidebarFilters: any = {};
+  @ViewChild(Sidebar) sidebarComp?: Sidebar;
+
   constructor(private productService: ProductService, private router: Router) {
     // Setup search debouncing
     this.searchSubject.pipe(
@@ -73,7 +77,14 @@ export class ProductList implements OnInit {
       page: this.currentPage,
       limit: this.itemsPerPage,
       search: this.searchTerm || undefined,
-      category: this.selectedCategory || undefined
+      category: this.selectedCategory || undefined,
+      // include sidebar filters if present
+      sizes: this.sidebarFilters?.sizes,
+      availability: this.sidebarFilters?.availability ?? undefined,
+      colors: this.sidebarFilters?.colors,
+      minPrice: this.sidebarFilters?.minPrice,
+      maxPrice: this.sidebarFilters?.maxPrice,
+      rating: this.sidebarFilters?.rating
     };
 
     console.log('Loading products with params:', this.queryParams);
@@ -155,6 +166,17 @@ export class ProductList implements OnInit {
     });
   }
 
+  onSidebarFilters(filters: any) {
+    // store filters and reload products
+    this.sidebarFilters = filters || {};
+    this.currentPage = 1;
+    if (this.filtersActive) {
+      this.loadProducts();
+    } else {
+      this.router.navigate(['/products']).then(() => this.loadProducts());
+    }
+  }
+
   goToProduct(id?: string) {
     if (!id) {
       this.error = 'Product ID is missing!';
@@ -192,7 +214,26 @@ export class ProductList implements OnInit {
   clearFilters(): void {
     this.searchTerm = '';
     this.selectedCategory = '';
+    this.sidebarFilters = {};
     this.currentPage = 1;
-    this.loadProducts();
+    // also clear the sidebar component selections if available
+    this.sidebarComp?.clearFilters();
+    // navigate to /products to reset route state and reload
+    this.router.navigate(['/products']).then(() => {
+      this.loadProducts();
+    });
+  }
+
+  get filtersActive(): boolean {
+    return !!(
+      (this.searchTerm && this.searchTerm.trim()) ||
+      this.selectedCategory ||
+      this.sidebarFilters?.sizes?.length ||
+      this.sidebarFilters?.colors?.length ||
+      this.sidebarFilters?.availability !== undefined && this.sidebarFilters?.availability !== null ||
+      this.sidebarFilters?.minPrice !== undefined ||
+      this.sidebarFilters?.maxPrice !== undefined ||
+      this.sidebarFilters?.rating !== undefined
+    );
   }
 }
