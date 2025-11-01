@@ -30,6 +30,7 @@ export class CartProduct {
       this.maxQuantity = this.productDetails.quantity;
     }
   }
+
   increaseQuantity() {
     if (this.quantity < this.maxQuantity) {
       const newQ = this.quantity + 1;
@@ -62,14 +63,22 @@ export class CartProduct {
   }
 
   deleteProduct() {
-    this.cartService.removeFromCart(this.product._id).subscribe({
-      next: (response) => {
-        this.productDeleted.emit(this.product._id);
-      },
-      error: (err) => {
-        console.error('Error deleting product from cart:', err);
-      },
-    });
+    // Use the cart item's _id for deletion
+    const cartItemId = this.product._id;
+
+    if (cartItemId) {
+      this.cartService.removeFromCart(cartItemId).subscribe({
+        next: (response) => {
+          console.log('Product deleted successfully');
+          this.productDeleted.emit(cartItemId);
+        },
+        error: (err) => {
+          console.error('Error deleting product from cart:', err);
+        },
+      });
+    } else {
+      console.error('Cart item ID not found');
+    }
   }
 
   private updateQuantity(newQuantity: number) {

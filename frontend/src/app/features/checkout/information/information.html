@@ -2,56 +2,92 @@
   <form>
     <div class="flex flex-col gap-1 my-2">
       <label class="block mb-2 font-semibold uppercase text-2xl">contact info</label>
-      <input type="email" class="w-full border border-gray-300 p-2 rounded" placeholder="Email" />
-      <input type="phone" class="w-full border border-gray-300 p-2 rounded" placeholder="Phone" />
+      <input
+        type="email"
+        class="w-full border border-gray-300 p-2 rounded"
+        placeholder="Email"
+        [(ngModel)]="email"
+        name="email"
+        (ngModelChange)="updateShipping()"
+      />
+      <input
+        type="phone"
+        class="w-full border border-gray-300 p-2 rounded"
+        placeholder="Phone"
+        [(ngModel)]="phone"
+        name="phone"
+        (ngModelChange)="updateShipping()"
+      />
     </div>
     <div class="flex flex-col gap-1 my-2">
       <label class="block mb-2 font-semibold uppercase text-2xl">shipping address</label>
       <div class="flex gap-1">
         <input
-          type="email"
+          type="text"
           class="w-full border border-gray-300 p-2 rounded"
           placeholder="First Name"
+          [(ngModel)]="firstName"
+          name="firstName"
+          (ngModelChange)="updateShipping()"
         />
         <input
-          type="phone"
+          type="text"
           class="w-full border border-gray-300 p-2 rounded"
           placeholder="Last Name"
+          [(ngModel)]="lastName"
+          name="lastName"
+          (ngModelChange)="updateShipping()"
         />
       </div>
-      <select class="w-full border border-gray-300 p-2 rounded">
+      <select
+        class="w-full border border-gray-300 p-2 rounded"
+        [(ngModel)]="country"
+        name="country"
+        (ngModelChange)="updateShipping()"
+      >
         <option value="">Country/Region</option>
-        <option value="us">United States</option>
-        <option value="ca">Canada</option>
-        <option value="uk">United Kingdom</option>
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="UK">United Kingdom</option>
       </select>
       <input
         type="text"
         class="w-full border border-gray-300 p-2 rounded"
         placeholder="State / Region"
+        [(ngModel)]="stateRegion"
+        name="stateRegion"
+        (ngModelChange)="updateShipping()"
       />
-      <input type="text" class="w-full border border-gray-300 p-2 rounded" placeholder="Address" />
+      <input
+        type="text"
+        class="w-full border border-gray-300 p-2 rounded"
+        placeholder="Address"
+        [(ngModel)]="address"
+        name="address"
+        (ngModelChange)="updateShipping()"
+      />
       <div class="flex gap-1">
-        <input type="text" class="w-full border border-gray-300 p-2 rounded" placeholder="City" />
+        <input
+          type="text"
+          class="w-full border border-gray-300 p-2 rounded"
+          placeholder="City"
+          [(ngModel)]="city"
+          name="city"
+          (ngModelChange)="updateShipping()"
+        />
         <input
           type="text"
           class="w-full border border-gray-300 p-2 rounded"
           placeholder="Postal Code"
+          [(ngModel)]="postalCode"
+          name="postalCode"
+          (ngModelChange)="updateShipping()"
         />
       </div>
-      <div class="flex justify-end">
-        <button
-          class="group w-full md:w-[50%] bg-gray-400 px-4 py-2 font-bold flex justify-between items-center"
-        >
-          <span>Payment</span>
-          <span class="transition-transform duration-300 group-hover:translate-x-3"
-            ><i class="fa-solid fa-arrow-right"></i
-          ></span>
-        </button>
-      </div>
+      <!-- Payment navigation removed: users proceed to pay using the Pay Now button in the Payment section -->
     </div>
   </form>
-  <div class="border border-gray-300 p-6 h-fit">
+  <!-- <div class="border border-gray-300 p-6 h-fit">
     <h3 class="text-xl uppercase">your order</h3>
     @for (item of products; track item.id){
 
@@ -74,5 +110,5 @@
       <span class="font-bold uppercase">total</span>
       <span class="font-bold">$99</span>
     </div>
-  </div>
+  </div> -->
 </div>
