@@ -6,6 +6,8 @@ import { environment } from '../../../environments/environment';
 export interface AddToCartPayload {
   productId: string;
   quantity: number;
+  size?: string | null;
+  color?: string | null;
 }
 
 export interface AddToCartResponse {
@@ -27,10 +29,12 @@ export class CartService {
    * Add product to cart via API
    * Requires authentication token in cookies or headers
    */
-  addToCart(productId: string, quantity: number = 1): Observable<AddToCartResponse> {
+  addToCart(productId: string, quantity: number = 1, size?: string | null, color?: string | null): Observable<AddToCartResponse> {
     const payload: AddToCartPayload = {
       productId,
       quantity,
+      size: size ?? null,
+      color: color ?? null,
     };
 
     console.log('Adding to cart:', payload);

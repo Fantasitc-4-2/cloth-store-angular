@@ -77,6 +77,85 @@
         }
 
         <div>
+          <!-- Size selector -->
+          <div *ngIf="product.sizes && product.sizes.length > 0" class="mb-6">
+            <label class="text-sm font-medium block mb-2">Select Size</label>
+            <div class="grid grid-cols-4 gap-2">
+              <button *ngFor="let s of product.sizes"
+                type="button"
+                (click)="selectedSize = s"
+                [class.bg-black]="selectedSize === s"
+                [class.text-white]="selectedSize === s"
+                class="p-3 border-2 rounded-lg hover:border-black transition-all duration-200 font-medium"
+              >
+                {{ s }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Color selector -->
+          <div *ngIf="product.colors && product.colors.length > 0" class="mb-6">
+            <label class="text-sm font-medium block mb-2">Select Color</label>
+            <div class="grid grid-cols-4 gap-3">
+              <button *ngFor="let c of product.colors"
+                type="button"
+                (click)="selectedColor = c"
+                class="group relative aspect-square rounded-lg hover:scale-110 transition-all duration-200"
+              >
+                <!-- Color swatch -->
+                <div 
+                  class="w-full h-full rounded-lg border-2"
+                  [style.background-color]="getColorCode(c)"
+                  [style.border-color]="selectedColor === c ? 'black' : 'transparent'"
+                ></div>
+                <!-- Color name tooltip -->
+                <span 
+                  class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded 
+                         opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
+                >
+                  {{ c }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quantity selector -->
+          <div class="mb-3">
+            <label class="text-sm font-medium">Quantity</label>
+            <div class="flex items-center gap-2 mt-2">
+              <button 
+                (click)="selectedQuantity = Math.max(1, selectedQuantity - 1)" 
+                class="px-3 py-2 border rounded hover:bg-gray-100 transition-colors"
+                [disabled]="selectedQuantity <= 1"
+                [class.opacity-50]="selectedQuantity <= 1"
+              >
+                <i class="fa-solid fa-minus"></i>
+              </button>
+              
+              <input 
+                type="number" 
+                [(ngModel)]="selectedQuantity" 
+                min="1" 
+                [max]="maxQuantity"
+                (change)="selectedQuantity = Math.max(1, Math.min(maxQuantity, selectedQuantity))"
+                class="w-16 text-center border rounded px-2 py-2" 
+              />
+              
+              <button 
+                (click)="selectedQuantity = Math.min(maxQuantity, selectedQuantity + 1)"
+                class="px-3 py-2 border rounded hover:bg-gray-100 transition-colors"
+                [disabled]="selectedQuantity >= maxQuantity"
+                [class.opacity-50]="selectedQuantity >= maxQuantity"
+              >
+                <i class="fa-solid fa-plus"></i>
+              </button>
+              
+              <span class="text-sm text-gray-500 ml-2">
+                (Max: {{maxQuantity}})
+              </span>
+            </div>
+          </div>
+
           <button
             (click)="addToCart()"
             [disabled]="addingToCart || (product.quantity && product.quantity <= 0)"

@@ -29,4 +29,9 @@ export class Bag implements OnInit {
       error: (err) => console.error('Error fetching cart products:', err),
     });
   }
+
+  onCartUpdated(event: { subTotal?: number }) {
+    // simple handler: refresh cart from server to ensure totals are correct
+    this.loadCart();
+  }
 }

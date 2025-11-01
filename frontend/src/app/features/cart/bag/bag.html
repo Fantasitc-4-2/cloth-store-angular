@@ -1,4 +1,4 @@
 <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
-  <app-cart-products [cartItems]="cartItems"></app-cart-products>
+  <app-cart-products [cartItems]="cartItems" (cartUpdated)="onCartUpdated($event)"></app-cart-products>
   <app-summary-card [subTotal]="subTotal"></app-summary-card>
 </div>

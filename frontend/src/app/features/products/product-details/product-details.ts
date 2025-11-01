@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { CommonModule, CurrencyPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { CartService } from '../../../core/services/cart.service';
@@ -10,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, NgxImageZoomModule, CurrencyPipe, HttpClientModule, RouterLink],
+  imports: [CommonModule, NgxImageZoomModule, CurrencyPipe, HttpClientModule, RouterLink, FormsModule],
   templateUrl: './product-details.html',
   styleUrls: ['./product-details.css'],
 })
@@ -21,6 +22,34 @@ export class ProductDetails implements OnInit {
   addingToCart = false;
   addToCartMessage: string | null = null;
   addToCartSuccess = false;
+  selectedSize: string | null = null;
+  selectedColor: string | null = null;
+  selectedQuantity: number = 1;
+  maxQuantity: number = 999;
+  protected readonly Math = Math;
+
+  // Map common color names to CSS colors (expand as needed)
+  private colorMap: { [key: string]: string } = {
+    'Black': '#000000',
+    'White': '#FFFFFF',
+    'Red': '#FF0000',
+    'Green': '#008000',
+    'Blue': '#0000FF',
+    'Yellow': '#FFFF00',
+    'Purple': '#800080',
+    'Orange': '#FFA500',
+    'Pink': '#FFC0CB',
+    'Brown': '#A52A2A',
+    'Gray': '#808080',
+    'Navy': '#000080',
+  };
+
+  getColorCode(colorName: string): string {
+    // Try exact match first, then case-insensitive match
+    return this.colorMap[colorName] || this.colorMap[Object.keys(this.colorMap).find(key => 
+      key.toLowerCase() === colorName.toLowerCase()
+    ) || ''] || colorName; // fallback to color name if no mapping found
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +68,13 @@ export class ProductDetails implements OnInit {
     this.productService.getProductById(id).subscribe({
       next: (p) => {
         this.product = p;
+        if (p.quantity) {
+          this.maxQuantity = p.quantity;
+          // Ensure selected quantity doesn't exceed max
+          if (this.selectedQuantity > this.maxQuantity) {
+            this.selectedQuantity = this.maxQuantity;
+          }
+        }
         this.loading = false;
       },
       error: (err) => {
@@ -62,11 +98,26 @@ export class ProductDetails implements OnInit {
       return;
     }
 
+    // If product has sizes or colors, ensure a selection is made
+    if (this.product.sizes && this.product.sizes.length > 0 && !this.selectedSize) {
+      this.addToCartMessage = 'Please select a size.';
+      this.addToCartSuccess = false;
+      this.hideMessageAfterDelay();
+      return;
+    }
+
+    if (this.product.colors && this.product.colors.length > 0 && !this.selectedColor) {
+      this.addToCartMessage = 'Please select a color.';
+      this.addToCartSuccess = false;
+      this.hideMessageAfterDelay();
+      return;
+    }
+
     this.addingToCart = true;
     this.addToCartMessage = null;
 
-    // Call API to add to cart (quantity default is 1)
-    this.cartService.addToCart(this.product._id, 1).subscribe({
+  // Call API to add to cart (use selected quantity and options)
+  this.cartService.addToCart(this.product._id, this.selectedQuantity || 1, this.selectedSize, this.selectedColor).subscribe({
       next: (response) => {
         console.log('Add to cart response:', response);
         this.addingToCart = false;

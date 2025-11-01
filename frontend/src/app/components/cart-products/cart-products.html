@@ -5,6 +5,7 @@
   <app-cart-product
     [product]="item"
     (productDeleted)="removeFromLocalList($event)"
+    (quantityChanged)="onQuantityChanged($event)"
   ></app-cart-product>
   } }
 </div>
