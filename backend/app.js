@@ -28,11 +28,8 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow server-to-server or tools without origin
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+      if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
@@ -40,13 +37,16 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-// Handle preflight for all routes
-app.options("*", cors());
+
+// Handle preflight requests (fixed)
+app.options(/.*/, cors());
+
 app.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   createOnlineSession
 );
+
 
 app.use(express.json());
 app.use(cookieParser());
