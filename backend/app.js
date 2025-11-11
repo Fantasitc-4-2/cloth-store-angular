@@ -21,7 +21,10 @@ const app = express();
 // Configure CORS to allow the deployed frontend
 const allowedOrigins = [
   "https://cloth-store-angular-three.vercel.app",
+  "https://cloth-store-angular-vert.vercel.app",
+  "http://localhost:4200", // for local testing
 ];
+
 app.use(
   cors({
     origin: (origin, callback) => {
