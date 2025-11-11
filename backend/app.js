@@ -18,12 +18,27 @@ import { createOnlineSession } from "./controllers/order.controller.js";
 
 const app = express();
 
+// Configure CORS to allow the deployed frontend
+const allowedOrigins = [
+  "https://cloth-store-angular-three.vercel.app",
+];
 app.use(
   cors({
-    origin: true,
+    origin: (origin, callback) => {
+      // Allow server-to-server or tools without origin
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+// Handle preflight for all routes
+app.options("*", cors());
 app.post(
   "/webhook",
   express.raw({ type: "application/json" }),
